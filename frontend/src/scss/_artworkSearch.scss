@@ -1,0 +1,19 @@
+@import "_defaultValues.scss";
+
+input {
+  background-color: $default-bg-color;
+  color: $default-color;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  padding: 5px 10px;
+}
+
+.divSearch {
+  margin-top: $margin-top;
+  width: 60%;
+  button {
+    color: $default-color;
+    right: 5px;
+  }
+}
