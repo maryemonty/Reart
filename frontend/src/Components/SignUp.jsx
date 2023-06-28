@@ -10,6 +10,7 @@ const SignUp = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [propic] = useState("");
 
   const toggleModal = () => {
     setSignUpModal(!signUpModal);
@@ -23,6 +24,7 @@ const SignUp = () => {
       username,
       email,
       password,
+      propic,
     };
     handleSignUp(formValues);
   };
@@ -34,6 +36,7 @@ const SignUp = () => {
       username: values.username,
       email: values.email,
       password: values.password,
+      propic: values.propic,
     };
 
     fetch("http://localhost:8080/users", {
