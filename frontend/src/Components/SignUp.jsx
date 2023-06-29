@@ -48,20 +48,16 @@ const SignUp = () => {
     })
       .then((response) => {
         if (response.ok) {
-          // Successful registration
           console.log("Registration submitted:", values);
-          // Perform desired operations after registration
-          // ...
         } else {
           throw new Error("Error during registration");
         }
       })
       .catch((error) => {
-        // Handle registration error
         console.log("Error during registration:", error);
       })
       .finally(() => {
-        toggleModal(); // Close the modal after registration
+        toggleModal();
       });
   };
 
@@ -73,7 +69,12 @@ const SignUp = () => {
         </div>
       ) : (
         <div className="d-flex justify-content-evenly buttons-user-join mb-5">
-          <button type="button" className="border-0 bg-transparent btn-in" onClick={toggleModal}>
+          <button
+            type="button"
+            className="border-0 bg-transparent btn-default white rounded"
+            style={{ width: "101px", height: "28.6px" }}
+            onClick={toggleModal}
+          >
             Sign up
           </button>
         </div>

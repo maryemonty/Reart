@@ -52,7 +52,7 @@ const Join = () => {
         </div>
       ) : (
         <div className="d-flex justify-content-evenly buttons-user-join mb-5">
-          <button className="bg-transparent btn-join fw-bold" onClick={toggleJoinModal}>
+          <button className="bg-transparent btn-join fw-bold rounded" onClick={toggleJoinModal}>
             Join
           </button>
         </div>

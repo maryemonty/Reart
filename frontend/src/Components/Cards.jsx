@@ -3,8 +3,8 @@ import UserPropic from "./UserPropic";
 
 function Cards() {
   return (
-    <div className="d-flex gap-3" style={{ width: "97%" }}>
-      <div className="card mb-5 border-0 ">
+    <div className="d-flex gap-3 flex-wrap" style={{ width: "97%" }}>
+      <div className="card mb-5 border-0 " style={{ width: "312.66px" }}>
         <div className="position-relative">
           <img src={BannerBackround} className="card-img-top" alt="logo" />
           <p className=" white position-absolute bottom-0 rounded px-4 py-2" style={{ backdropFilter: "blur(10px)" }}>
@@ -23,7 +23,7 @@ function Cards() {
           </div>
         </div>
       </div>
-      <div className="card mb-5 border-0">
+      <div className="card mb-5 border-0" style={{ width: "312.66px" }}>
         <img src={BannerBackround} className="card-img-top" alt="logo"></img>
         <div className="card-body default-bg-color">
           <h5 className="card-title white">Titolo Opera</h5>
@@ -42,7 +42,7 @@ function Cards() {
           </div>
         </div>
       </div>
-      <div className="card mb-5 border-0">
+      <div className="card mb-5 border-0" style={{ width: "312.66px" }}>
         <img src={BannerBackround} className="card-img-top" alt="logo"></img>
         <div className="card-body default-bg-color">
           <h5 className="card-title white">Titolo Opera</h5>
