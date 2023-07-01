@@ -4,10 +4,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
-public class UserRegistration {
+@Data
+public class UserSignUp {
 	@NotNull(message = "Please enter a username")
 	@Pattern(regexp = "[a-zA-Z0-9]+", message = "Please enter a valid alphanumeric username")
 	String username;

@@ -1,9 +1,9 @@
-import { useContext, useState } from "react";
-import { AuthContext } from "./AuthContext";
+import { useState, useContext } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { AuthContext } from "./AuthContext";
 
 const SignUp = () => {
-  const { isLoggedIn, user, setUser } = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext);
   const [signUpModal, setSignUpModal] = useState(false);
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
@@ -39,7 +39,7 @@ const SignUp = () => {
       propic: values.propic,
     };
 
-    fetch("http://localhost:8080/users", {
+    fetch("http://localhost:8080/auth/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -63,23 +63,16 @@ const SignUp = () => {
 
   return (
     <div>
-      {isLoggedIn ? (
-        <div>
-          <img src={user.propic} alt="Profile" />
-        </div>
-      ) : (
-        <div className="d-flex justify-content-evenly buttons-user-join mb-5">
-          <button
-            type="button"
-            className="border-0 bg-transparent btn-default white rounded"
-            style={{ width: "101px", height: "28.6px" }}
-            onClick={toggleModal}
-          >
-            Sign up
-          </button>
-        </div>
-      )}
-
+      <div className={isLoggedIn ? "d-none" : "d-flex justify-content-evenly buttons-user-join mb-5"}>
+        <button
+          type="button"
+          className="border-0 bg-transparent btn-default white rounded"
+          style={{ width: "101px", height: "28.6px" }}
+          onClick={toggleModal}
+        >
+          Sign up
+        </button>
+      </div>
       <Modal isOpen={signUpModal} toggle={toggleModal} contentClassName="default-bg-color">
         <ModalHeader className="border-0" toggle={toggleModal}>
           Sign Up

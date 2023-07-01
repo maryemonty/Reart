@@ -2,15 +2,15 @@ import { AuthProvider } from "./AuthContext";
 import Join from "./Join";
 import SignUp from "./SignUp";
 
-function RightBar() {
+const RightBar = () => {
   return (
-    <AuthProvider>
-      <div className="d-flex justify-content-evenly buttons-user-join mb-5">
+    <div className="d-flex justify-content-evenly buttons-user-join mb-5">
+      <AuthProvider>
         <Join />
         <SignUp />
-      </div>
-    </AuthProvider>
+      </AuthProvider>
+    </div>
   );
-}
+};
 
 export default RightBar;

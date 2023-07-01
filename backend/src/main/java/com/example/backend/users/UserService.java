@@ -7,54 +7,66 @@ import org.springframework.stereotype.Service;
 
 import com.example.backend.exceptions.BadRequest;
 import com.example.backend.exceptions.NotFound;
-import com.example.backend.users.payloads.UserRegistration;
+import com.example.backend.users.payloads.UserSignUp;
 
 @Service
 public class UserService {
 
+	private final UserRepository userRepository;
+
 	@Autowired
-	private UserRepository users;
+	public UserService(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
-	public User create(UserRegistration u) {
+	public User createUser(UserSignUp userSignUp) {
+		validateUniqueEmail(userSignUp.getEmail());
+		validateUniqueUsername(userSignUp.getUsername());
 
-		// check if email already exist
-		users.findByEmail(u.getEmail()).ifPresent(user -> {
+		User newUser = new User(userSignUp.getUsername(), userSignUp.getName(), userSignUp.getSurname(),
+				userSignUp.getEmail(), userSignUp.getPassword());
+		newUser.setPropic("https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png");
+
+		return userRepository.save(newUser);
+	}
+
+	public List<User> getUsers() {
+		return userRepository.findAll();
+	}
+
+	public User getUser(String identifier) throws NotFound {
+		return userRepository.findByUsernameOrEmail(identifier, identifier)
+				.orElseThrow(() -> new NotFound("User not found"));
+	}
+
+	public User updateUser(String identifier, UserSignUp userSignUp) throws NotFound {
+		User existingUser = getUser(identifier);
+		existingUser.setUsername(userSignUp.getUsername());
+		existingUser.setName(userSignUp.getName());
+		existingUser.setSurname(userSignUp.getSurname());
+		existingUser.setEmail(userSignUp.getEmail());
+		existingUser.setPassword(userSignUp.getPassword());
+		return userRepository.save(existingUser);
+	}
+
+	public void deleteUser(String identifier) throws NotFound {
+		User user = getUser(identifier);
+		userRepository.delete(user);
+	}
+
+	private void validateUniqueEmail(String email) {
+		userRepository.findByEmail(email).ifPresent(user -> {
 			throw new BadRequest("Email already in use");
 		});
+	}
 
-		// check if email already exist
-		users.findByUsername(u.getUsername()).ifPresent(user -> {
+	private void validateUniqueUsername(String username) {
+		userRepository.findByUsername(username).ifPresent(user -> {
 			throw new BadRequest("Username already in use");
 		});
-
-		User validationUser = new User(u.getUsername(), u.getName(), u.getSurname(), u.getEmail(), u.getPassword());
-
-		return users.save(validationUser);
 	}
 
-	public List<User> find() {
-		return users.findAll();
-	}
-
-	public User findByUsername(String username) throws NotFound {
-		return users.findByUsername(username).orElseThrow(() -> new NotFound("User not found"));
-	}
-
-	public User findByUsernameAndUpdate(String username, UserRegistration u) throws Exception {
-		User found = this.findByUsername(username);
-
-		found.setUsername(u.getUsername());
-		found.setName(u.getName());
-		found.setSurname(u.getSurname());
-		found.setEmail(u.getEmail());
-		found.setPassword(u.getPassword());
-		found.setPropic("https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png");
-
-		return users.save(found);
-	}
-
-	public void findyUsernameAndDelete(String username) throws NotFound {
-		User found = this.findByUsername(username);
-		users.delete(found);
+	public User findByEmail(String email) throws NotFound {
+		return userRepository.findByEmail(email).orElseThrow(() -> new NotFound("User not found"));
 	}
 }

@@ -10,3 +10,7 @@
     width: 100px;
   }
 }
+
+.notify::after {
+  display: none;
+}
