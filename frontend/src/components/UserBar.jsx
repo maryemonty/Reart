@@ -5,12 +5,15 @@ import { AuthContext } from "./AuthContext";
 import { Link } from "react-router-dom";
 import { IoMdSettings } from "react-icons/io";
 import { RiAccountCircleFill } from "react-icons/ri";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setNewEmail, setNewSurname, setNewName, setNewUsername, setNewId, setNewPropic } from "../redux/reducers";
 
 function UserBar({ email }) {
+  const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
   const [propic, setPropic] = useState("");
   const [username, setUsername] = useState("");
+  const [id, setId] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { loggedOut } = useContext(AuthContext);
 
@@ -31,6 +34,13 @@ function UserBar({ email }) {
       .then((data) => {
         setPropic(data.propic);
         setUsername(data.username);
+        setId(data.id);
+        dispatch(setNewId(data.id));
+        dispatch(setNewUsername(data.username));
+        dispatch(setNewName(data.name));
+        dispatch(setNewSurname(data.surname));
+        dispatch(setNewEmail(data.email));
+        dispatch(setNewPropic(data.propic));
       })
       .catch((error) => {
         console.log("Errore durante il recupero delle informazioni utente:", error);
@@ -64,7 +74,9 @@ function UserBar({ email }) {
             </Link>
           </DropdownItem>
           <DropdownItem className="text-decoration-none white">
-            <IoMdSettings /> Settings
+            <Link to={"/settings/" + id} className="text-decoration-none white">
+              <IoMdSettings /> Settings
+            </Link>
           </DropdownItem>
           <hr></hr>
           <DropdownItem onClick={logOut} className="text-center white">

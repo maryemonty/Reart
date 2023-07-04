@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,12 +23,12 @@ public class UserProfileController {
 	}
 
 	@GetMapping("")
-	public List<User> getProfile() {
+	public List<UserProfile> getProfile() {
 		List<User> users = userService.getUsers();
-		List<User> profile = new ArrayList<>();
+		List<UserProfile> profile = new ArrayList<>();
 
 		for (User user : users) {
-			User profileUser = new User();
+			UserProfile profileUser = new UserProfile();
 			profileUser.setUsername(user.getUsername());
 			profileUser.setName(user.getName());
 			profileUser.setSurname(user.getSurname());
@@ -35,6 +36,16 @@ public class UserProfileController {
 		}
 
 		return profile;
+	}
+
+	@GetMapping("/{username}")
+	public UserProfile getUser(@PathVariable String username) {
+		User user = userService.getUser(username);
+		UserProfile profileUser = new UserProfile();
+		profileUser.setUsername(user.getUsername());
+		profileUser.setName(user.getName());
+		profileUser.setSurname(user.getSurname());
+		return profileUser;
 	}
 
 }

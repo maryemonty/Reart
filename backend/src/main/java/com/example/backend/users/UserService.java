@@ -1,6 +1,7 @@
 package com.example.backend.users;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,14 +40,14 @@ public class UserService {
 				.orElseThrow(() -> new NotFound("User not found"));
 	}
 
-	public User updateUser(String identifier, UserSignUp userSignUp) throws NotFound {
-		User existingUser = getUser(identifier);
-		existingUser.setUsername(userSignUp.getUsername());
-		existingUser.setName(userSignUp.getName());
-		existingUser.setSurname(userSignUp.getSurname());
-		existingUser.setEmail(userSignUp.getEmail());
-		existingUser.setPassword(userSignUp.getPassword());
-		return userRepository.save(existingUser);
+	public User registerUser(String identifier, UserSignUp userSignUp) throws NotFound {
+		User signupUser = getUser(identifier);
+		signupUser.setUsername(userSignUp.getUsername());
+		signupUser.setName(userSignUp.getName());
+		signupUser.setSurname(userSignUp.getSurname());
+		signupUser.setEmail(userSignUp.getEmail());
+		signupUser.setPassword(userSignUp.getPassword());
+		return userRepository.save(signupUser);
 	}
 
 	public void deleteUser(String identifier) throws NotFound {
@@ -54,13 +55,13 @@ public class UserService {
 		userRepository.delete(user);
 	}
 
-	private void validateUniqueEmail(String email) {
+	public void validateUniqueEmail(String email) {
 		userRepository.findByEmail(email).ifPresent(user -> {
 			throw new BadRequest("Email already in use");
 		});
 	}
 
-	private void validateUniqueUsername(String username) {
+	public void validateUniqueUsername(String username) {
 		userRepository.findByUsername(username).ifPresent(user -> {
 			throw new BadRequest("Username already in use");
 		});
@@ -69,4 +70,19 @@ public class UserService {
 	public User findByEmail(String email) throws NotFound {
 		return userRepository.findByEmail(email).orElseThrow(() -> new NotFound("User not found"));
 	}
+
+	public User updateUser(UUID id, User existingUser) {
+		User update = findById(id);
+		update.setUsername(existingUser.getUsername());
+		update.setName(existingUser.getName());
+		update.setSurname(existingUser.getSurname());
+		update.setEmail(existingUser.getEmail());
+		update.setPassword(existingUser.getPassword());
+		return userRepository.save(update);
+	}
+
+	public User findById(UUID id) {
+		return userRepository.findById(id).orElseThrow(() -> new NotFound("User not found"));
+	}
+
 }

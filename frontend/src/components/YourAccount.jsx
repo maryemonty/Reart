@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 function YourAccount() {
   const token = useSelector((state) => state.user.token);
   const params = useParams();
-  console.log(params.profile);
+  console.log(params.user);
   const [username, setUsername] = useState("");
   const [propic, setPropic] = useState("");
   const [name, setName] = useState("");
@@ -13,7 +13,7 @@ function YourAccount() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/users/${params.profile}`, {
+    fetch(`http://localhost:8080/profile/${params.user}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -27,7 +27,6 @@ function YourAccount() {
         }
       })
       .then((data) => {
-        console.log(data);
         setPropic(data.propic);
         setUsername(data.username);
         setName(data.name);

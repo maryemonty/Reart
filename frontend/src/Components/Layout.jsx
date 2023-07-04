@@ -6,10 +6,9 @@ import Home from "./Home";
 import TopArtist from "./TopArtist";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import YourAccount from "./YourAccount";
-import { useSelector } from "react-redux";
+import Settings from "./Settings";
 
 function Layout() {
-  const username = useSelector((state) => state.user.username);
   return (
     <BrowserRouter>
       <Row>
@@ -20,7 +19,8 @@ function Layout() {
           <ArtworkSearch />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path={"/youraccount/:profile"} element={<YourAccount />} />
+            <Route path={"/youraccount/:user"} element={<YourAccount />} />
+            <Route path={"/settings/:id"} element={<Settings />} />
           </Routes>
         </Col>
         <Col>

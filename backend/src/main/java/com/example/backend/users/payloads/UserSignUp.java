@@ -10,18 +10,22 @@ import lombok.Data;
 public class UserSignUp {
 	@NotNull(message = "Please enter a username")
 	@Pattern(regexp = "[a-zA-Z0-9]+", message = "Please enter a valid alphanumeric username")
-	String username;
+	private String username;
+
 	@NotNull(message = "Please enter a name")
 	@Pattern(regexp = "[a-z]+", message = "Please enter a valid name")
-	String name;
+	private String name;
+
 	@NotNull(message = "Please enter a surname")
 	@Pattern(regexp = "[a-z]+", message = "Please enter a valid surname")
 	@Size(max = 30, message = "Please enter a shorter username")
-	String surname;
+	private String surname;
+
 	@NotNull(message = "Please enter an email")
 	@Email
-	String email;
+	private String email;
+
 	@NotNull(message = "Please enter a password")
 	@Size(min = 8, message = "Please enter a more secure password")
-	String password;
+	private String password;
 }

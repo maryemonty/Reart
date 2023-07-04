@@ -44,7 +44,6 @@ const Join = () => {
         console.log("Token di autenticazione:", data.token);
         dispatch(setTokenRedux(data.token)); // Utilizza useDispatch per chiamare l'azione setTokenRedux
         setAuthState(true, data.user);
-
         toggleJoinModal();
       })
       .catch((error) => {
