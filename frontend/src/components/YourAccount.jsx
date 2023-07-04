@@ -4,10 +4,10 @@ import { useParams } from "react-router-dom";
 
 function YourAccount() {
   const token = useSelector((state) => state.user.token);
+  const propic = useSelector((state) => state.profile.propic);
   const params = useParams();
   console.log(params.user);
   const [username, setUsername] = useState("");
-  const [propic, setPropic] = useState("");
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -27,7 +27,6 @@ function YourAccount() {
         }
       })
       .then((data) => {
-        setPropic(data.propic);
         setUsername(data.username);
         setName(data.name);
         setSurname(data.surname);

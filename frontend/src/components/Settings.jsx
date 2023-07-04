@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { MdModeEdit } from "react-icons/md";
 import { Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 
 const Settings = () => {
+  const dispatch = useDispatch();
   const params = useParams();
   const profile = useSelector((state) => state.profile);
   const token = useSelector((state) => state.token);
@@ -15,51 +16,24 @@ const Settings = () => {
   const [newSurname, setNewSurname] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [newImage, setNewImage] = useState(null);
+  const [newPropic, setNewPropic] = useState(null); // Cambiato da string a null
 
   const [editUsername, setEditUsername] = useState(false);
   const [editName, setEditName] = useState(false);
   const [editSurname, setEditSurname] = useState(false);
   const [editEmail, setEditEmail] = useState(false);
-  const [editImage, setEditImage] = useState(false);
+  const [editPropic, setEditPropic] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
   const updateUser = () => {
-    const updatedFields = {};
-
-    if (newUsername !== "") {
-      updatedFields.username = newUsername;
-    } else {
-      updatedFields.username = profile.username;
-    }
-
-    if (newName !== "") {
-      updatedFields.name = newName;
-    } else {
-      updatedFields.name = profile.name;
-    }
-
-    if (newSurname !== "") {
-      updatedFields.surname = newSurname;
-    } else {
-      updatedFields.surname = profile.surname;
-    }
-
-    if (newEmail !== "") {
-      updatedFields.email = newEmail;
-    } else {
-      updatedFields.email = profile.email;
-    }
-
-    if (newPassword !== "") {
-      updatedFields.password = newPassword;
-    } else {
-      updatedFields.password = profile.password;
-    }
-
-    if (newImage !== null) {
-      updatedFields.image = newImage;
-    }
+    const updatedFields = {
+      username: newUsername || profile.username,
+      name: newName || profile.name,
+      surname: newSurname || profile.surname,
+      email: newEmail || profile.email,
+      password: newPassword || profile.password,
+      propic: newPropic || profile.propic,
+    };
 
     fetch(url, {
       method: "PUT",
@@ -83,14 +57,16 @@ const Settings = () => {
       });
   };
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    setNewImage(URL.createObjectURL(file));
-    setModalOpen(false);
+  const handlePropicChange = (e) => {
+    const file = e.target.files[0];
+    const objectURL = URL.createObjectURL(file); // Converti l'immagine in un URL
+
+    setNewPropic(objectURL); // Imposta l'URL come newPropic
   };
 
   const toggleModal = () => {
     setModalOpen(!modalOpen);
+    setEditPropic(true);
   };
 
   return (
@@ -98,20 +74,21 @@ const Settings = () => {
       <Col lg={4}>
         <div className="position-relative d-flex justify-content-end">
           <img
-            style={{ maxWidth: "100px", maxHeight: "100px" }}
-            src={newImage || profile.propic}
+            style={{ width: "100px", height: "100px" }}
+            src={newPropic || profile.propic}
             alt="profile picture"
+            className="rounded-circle"
           />
           <MdModeEdit
-            className="position-absolute end-0 bottom-0 white"
-            style={{ height: "50px", width: "50px" }}
+            className="position-absolute end-0 bottom-0 white rounded-circle p-1 border bg-black"
+            style={{ height: "25px", width: "25px" }}
             onClick={toggleModal}
           />
         </div>
         <Modal isOpen={modalOpen} toggle={toggleModal}>
           <ModalHeader toggle={toggleModal}>Update Profile Picture</ModalHeader>
           <ModalBody>
-            <input type="file" accept="image/*" onChange={handleImageUpload} />
+            <input type="file" accept="image/*" onChange={handlePropicChange} />
           </ModalBody>
           <ModalFooter>
             <Button color="primary" onClick={toggleModal}>
@@ -127,7 +104,7 @@ const Settings = () => {
           ) : (
             <>
               {newUsername !== "" ? newUsername : profile.username}{" "}
-              <MdModeEdit className="position-absolute end-0 white" onClick={() => setEditUsername(true)} />
+              <MdModeEdit className="position-absolute end-0 white " onClick={() => setEditUsername(true)} />
             </>
           )}
         </div>
@@ -167,7 +144,9 @@ const Settings = () => {
             Change your password
           </button>
         </div>
-        <button onClick={updateUser}>Update</button>
+        <button className="btn-default white border-0 p-2" onClick={updateUser}>
+          Update
+        </button>
       </Col>
     </Row>
   );

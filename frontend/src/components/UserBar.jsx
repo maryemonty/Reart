@@ -64,7 +64,12 @@ function UserBar({ email }) {
       {/* user propic */}
       <Dropdown isOpen={dropdownOpen} toggle={toggleDropdown}>
         <DropdownToggle caret className="bg-transparent border-0">
-          <img style={{ width: "32px", height: "32px" }} src={propic} alt="profile picture" />
+          <img
+            style={{ width: "32px", height: "32px" }}
+            src={propic}
+            alt="profile picture"
+            className="rounded-circle"
+          />
         </DropdownToggle>
         <DropdownMenu className="default-bg-color">
           <DropdownItem>
