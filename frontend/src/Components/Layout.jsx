@@ -20,6 +20,7 @@ function Layout() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path={"/youraccount/:user"} element={<YourAccount />} />
+            <Route path={"/categories"} element={<YourAccount />} />
             <Route path={"/settings/:id"} element={<Settings />} />
           </Routes>
         </Col>

@@ -22,6 +22,8 @@ function UserBar({ email }) {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      mode: "cors",
+      credentials: "include",
     })
       .then((response) => {
         if (response.ok) {

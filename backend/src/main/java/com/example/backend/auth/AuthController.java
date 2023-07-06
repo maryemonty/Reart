@@ -25,7 +25,7 @@ import com.example.backend.users.payloads.UserSignUp;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = { "http://localhost:3000", "blob:http://localhost:3000" })
 public class AuthController {
 
 	private final UserService userService;
