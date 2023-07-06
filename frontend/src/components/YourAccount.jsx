@@ -50,14 +50,9 @@ function YourAccount() {
         className="position-absolute top-0 start-0 bottom-0 end-0 vh-100 vw-100 opacity-25 z-n1"
         style={{ filter: "blur(500px)" }}
       />
-      <div className="d-flex align-items-end gap-3 justify-content-evenly m-5">
+      <div className="d-flex align-items-end gap-3 m-5">
         {/* profile picture */}
-        <img
-          src={propic}
-          alt="profile picture"
-          className="rounded-circle"
-          style={{ width: "300px", height: "300px" }}
-        />
+        <img src={propic} alt="profile picture" className=" img-fluid" style={{ width: "300px", height: "300px" }} />
         <div>
           <p className="white fs-1">@{username}</p>
           <p className="white fs-1 text-capitalize">

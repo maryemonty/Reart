@@ -20,7 +20,7 @@ function ListNames() {
   const [activeItem, setActiveItem] = useState("Home");
 
   const handleItemClick = (itemName) => {
-    setActiveItem(itemName === activeItem ? null : itemName);
+    setActiveItem(itemName);
   };
 
   return (
