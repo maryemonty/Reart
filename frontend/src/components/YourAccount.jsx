@@ -20,7 +20,7 @@ function YourAccount() {
     })
       .then((response) => {
         if (response.ok) {
-          console.log("siamo qui ora");
+          console.log("siamo qui ora", response);
           return response.json();
         } else {
           throw new Error("Errore durante il recupero delle informazioni utente");

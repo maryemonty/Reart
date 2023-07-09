@@ -27,7 +27,7 @@ function UserBar({ email }) {
     })
       .then((response) => {
         if (response.ok) {
-          console.log("siamo qui");
+          console.log("siamo qui", response);
           return response.json();
         } else {
           throw new Error("Errore durante il recupero delle informazioni utente");

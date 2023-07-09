@@ -1,6 +1,6 @@
-import Layout from "./components/Layout";
 import { Container } from "reactstrap";
 import "./scss/style.scss";
+import Layout from "./Components/Layout";
 
 function App() {
   return (
