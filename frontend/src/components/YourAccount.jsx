@@ -66,6 +66,7 @@ function YourAccount() {
           </p>
         </div>
       </div>
+      <hr></hr>
       <MyArtworks />
     </div>
   );

@@ -29,7 +29,7 @@ public class ArtworkService {
 	public Artwork create(UUID userId, Artwork artwork) {
 		User user = findByUserId(userId);
 		Artwork newArtwork = new Artwork(artwork.getTitle(), artwork.getDescription(), artwork.getArt(),
-				artwork.getCategory(), artwork.getPrice(), user);
+				artwork.getCategory(), artwork.getPrice(), user, artwork.getLikes());
 		return artworkRepository.save(newArtwork);
 	}
 

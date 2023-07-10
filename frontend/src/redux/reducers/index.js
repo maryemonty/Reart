@@ -11,6 +11,9 @@ const initialState = {
     id: "",
     propic: "",
   },
+  artwork: {
+    id: "",
+  },
 };
 
 const mainReducer = (state = initialState, action) => {
@@ -79,6 +82,14 @@ const mainReducer = (state = initialState, action) => {
           propic: action.payload,
         },
       };
+    case "SET_ARTWORKID":
+      return {
+        ...state,
+        artwork: {
+          ...state.artwork,
+          id: action.payload,
+        },
+      };
     default:
       return state;
   }
@@ -115,6 +126,10 @@ export const setNewId = (id) => ({
 export const setNewPropic = (propic) => ({
   type: "SET_NEWPROPIC",
   payload: propic,
+});
+export const setArtworkId = (id) => ({
+  type: "SET_ARTWORKID",
+  payload: id,
 });
 
 export default mainReducer;

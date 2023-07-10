@@ -28,6 +28,7 @@ public class Artwork {
 	private String description;
 	private String art;
 	private String price;
+	private int likes;
 
 	@Enumerated
 	private Categories category;
@@ -37,13 +38,15 @@ public class Artwork {
 	@JsonIgnore
 	private User user;
 
-	public Artwork(String title, String description, String art, Categories category, String price, User user) {
+	public Artwork(String title, String description, String art, Categories category, String price, User user,
+			int likes) {
 		this.title = title;
 		this.description = description;
 		this.art = art;
 		this.category = category;
 		this.price = price;
 		this.user = user;
+		this.likes = likes;
 	}
 
 }
