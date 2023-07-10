@@ -41,8 +41,8 @@ public class ArtworkController {
 		return artworkService.find();
 	}
 
-	private boolean hasUserLikedArtwork(Artwork artwork, User user) {
-		return artwork.getLikes() > 0;
+	private boolean hasUserLikedArtwork(Artwork artwork, UUID userId) {
+		return artwork.getLikes() > 0 && artwork.getUser().getId().equals(userId);
 	}
 
 	@PostMapping("/like/{artworkId}/{userId}")
@@ -50,7 +50,7 @@ public class ArtworkController {
 		Artwork artwork = artworkService.findById(artworkId);
 		User currentUser = userService.findById(userId);
 		if (artwork != null && currentUser != null) {
-			if (!hasUserLikedArtwork(artwork, currentUser)) {
+			if (!hasUserLikedArtwork(artwork, userId)) {
 				artwork.setLikes(artwork.getLikes() + 1); // Increment the number of likes
 				artworkRepository.save(artwork); // Save the modified artwork
 				return ResponseEntity.ok("Artwork liked successfully.");
@@ -67,7 +67,7 @@ public class ArtworkController {
 		Artwork artwork = artworkService.findById(artworkId);
 		User currentUser = userService.findById(userId);
 		if (artwork != null && currentUser != null) {
-			if (hasUserLikedArtwork(artwork, currentUser)) {
+			if (hasUserLikedArtwork(artwork, userId)) {
 				artwork.setLikes(artwork.getLikes() - 1); // Decrement the number of likes
 				artworkRepository.save(artwork); // Save the modified artwork
 				return ResponseEntity.ok("Artwork disliked successfully.");
@@ -84,7 +84,7 @@ public class ArtworkController {
 		Artwork artwork = artworkService.findById(artworkId);
 		User currentUser = userService.findById(userId);
 		if (artwork != null && currentUser != null) {
-			boolean isLiked = hasUserLikedArtwork(artwork, currentUser);
+			boolean isLiked = hasUserLikedArtwork(artwork, userId);
 			return ResponseEntity.ok(isLiked);
 		} else {
 			throw new NotFound("Artwork or User not found.");
