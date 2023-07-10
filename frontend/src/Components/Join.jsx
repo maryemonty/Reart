@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { setTokenRedux } from "../redux/reducers";
 import { AuthContext } from "./AuthContext";
 import UserBar from "./UserBar";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const Join = () => {
   const { isLoggedIn, setAuthState } = useContext(AuthContext);
@@ -12,6 +13,7 @@ const Join = () => {
   const [joinModal, setJoinModal] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const toggleJoinModal = () => {
     setJoinModal(!joinModal);
@@ -42,13 +44,17 @@ const Join = () => {
       })
       .then((data) => {
         console.log("Token di autenticazione:", data.token);
-        dispatch(setTokenRedux(data.token)); // Utilizza useDispatch per chiamare l'azione setTokenRedux
+        dispatch(setTokenRedux(data.token));
         setAuthState(true, data.user);
         toggleJoinModal();
       })
       .catch((error) => {
         console.log("Errore durante il login:", error);
       });
+  };
+
+  const handlePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -81,14 +87,29 @@ const Join = () => {
             </div>
             <div>
               <label htmlFor="password">Password:</label>
-              <input
-                placeholder="Inserisci la tua password qui"
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div className="position-relative">
+                <input
+                  placeholder="Inserisci la tua password qui"
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                {showPassword ? (
+                  <AiOutlineEyeInvisible
+                    className="position-absolute top-50 translate-middle text-white fs-2"
+                    style={{ left: "95%" }}
+                    onClick={handlePasswordVisibility}
+                  />
+                ) : (
+                  <AiOutlineEye
+                    className="position-absolute top-50 translate-middle text-white fs-2"
+                    style={{ left: "95%" }}
+                    onClick={handlePasswordVisibility}
+                  />
+                )}
+              </div>
             </div>
             <ModalFooter className="border-0">
               <Button onClick={toggleJoinModal} className="btn-join bg-transparent">
