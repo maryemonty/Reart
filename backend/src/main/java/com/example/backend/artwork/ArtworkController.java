@@ -15,37 +15,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.backend.exceptions.NotFound;
+
 @RestController
 @RequestMapping("artworks")
 public class ArtworkController {
 
-	@Autowired
-	private ArtworkService artworkService;
+	private final ArtworkService artworkService;
 
-	@GetMapping()
+	@Autowired
+	public ArtworkController(ArtworkService artworkService) {
+		this.artworkService = artworkService;
+	}
+
+	@GetMapping
 	public List<Artwork> getArtworks() {
 		return artworkService.find();
-	};
+	}
 
-	@PostMapping("")
+	@PostMapping("/{userId}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Artwork saveArtwork(@RequestBody Artwork body) {
-		return artworkService.create(body);
+	public Artwork saveArtwork(@PathVariable UUID userId, @RequestBody Artwork artwork) {
+		return artworkService.create(userId, artwork);
 	}
 
 	@GetMapping("{artworkId}")
-	public Artwork getArtwork(@PathVariable UUID artworkId) throws Exception {
+	public Artwork getArtwork(@PathVariable UUID artworkId) throws NotFound {
 		return artworkService.findById(artworkId);
 	}
 
-	@PutMapping("{artworkId}")
-	public Artwork updateArtwork(@PathVariable UUID artworkId, @RequestBody Artwork body) throws Exception {
-		return artworkService.findByIdAndUpdate(artworkId, body);
+	@PutMapping("{userId}/{artworkId}")
+	public Artwork updateArtwork(@PathVariable UUID userId, @PathVariable UUID artworkId,
+			@RequestBody Artwork updatedArtwork) throws NotFound {
+		return artworkService.findByIdAndUpdate(userId, artworkId, updatedArtwork);
 	}
 
 	@DeleteMapping("{artworkId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteArtwork(@PathVariable UUID artworkId) throws Exception {
+	public void deleteArtwork(@PathVariable UUID artworkId) throws NotFound {
 		artworkService.findByIdAndDelete(artworkId);
 	}
 }

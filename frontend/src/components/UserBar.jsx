@@ -70,7 +70,7 @@ function UserBar({ email }) {
             style={{ width: "32px", height: "32px" }}
             src={propic}
             alt="profile picture"
-            className="rounded-circle"
+            className="rounded-circle img-fluid"
           />
         </DropdownToggle>
         <DropdownMenu className="default-bg-color">

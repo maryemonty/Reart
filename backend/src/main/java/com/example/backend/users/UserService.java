@@ -36,8 +36,9 @@ public class UserService {
 	}
 
 	public User getUser(String identifier) throws NotFound {
-		return userRepository.findByUsernameOrEmail(identifier, identifier)
+		User user = userRepository.findByUsernameOrEmail(identifier, identifier)
 				.orElseThrow(() -> new NotFound("User not found"));
+		return user;
 	}
 
 	public User registerUser(String identifier, UserSignUp userSignUp) throws NotFound {

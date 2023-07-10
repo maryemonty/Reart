@@ -16,7 +16,7 @@ import com.example.backend.exceptions.NotFound;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = { "http://localhost:3000", "blob:http://localhost:3000" })
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
 	private final UserService userService;

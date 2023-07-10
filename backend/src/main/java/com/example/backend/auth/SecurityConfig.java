@@ -26,11 +26,11 @@ public class SecurityConfig {
 		http.csrf(c -> c.disable());
 
 		// l'endpoint users già di default richiede l'autenticazione
-		http.authorizeHttpRequests(auth -> auth.requestMatchers("/users/**").authenticated()); // .authenticated(),
+		// .authenticated(),
 		// permitAll() don't //
 		// need
 		// authorization
-		http.authorizeHttpRequests(auth -> auth.requestMatchers("/artworks/**").authenticated());
+		http.authorizeHttpRequests(auth -> auth.requestMatchers("/users/**").permitAll());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/profile/**").permitAll());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll());
 

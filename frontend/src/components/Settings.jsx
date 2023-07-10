@@ -77,7 +77,7 @@ const Settings = () => {
             style={{ width: "100px", height: "100px" }}
             src={newPropic || profile.propic}
             alt="profile picture"
-            className="rounded-circle"
+            className="rounded-circle img-fluid"
           />
           <MdModeEdit
             className="position-absolute end-0 bottom-0 white rounded-circle p-1 border bg-black"
