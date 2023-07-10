@@ -3,7 +3,7 @@ package com.example.backend.artwork;
 import java.util.UUID;
 
 import com.example.backend.users.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
@@ -35,7 +35,7 @@ public class Artwork {
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	@JsonIgnore
+	@JsonIgnoreProperties("artworks")
 	private User user;
 
 	public Artwork(String title, String description, String art, Categories category, String price, User user,

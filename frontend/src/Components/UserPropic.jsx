@@ -1,9 +1,7 @@
-import BannerBackround from "../assets/bannerBackground.jpg";
-
-function UserPropic() {
+function UserPropic({ userPropic }) {
   return (
     <img
-      src={BannerBackround}
+      src={userPropic}
       alt="user's profile picture"
       style={{ width: "30px", height: "30px" }}
       className="rounded-circle"

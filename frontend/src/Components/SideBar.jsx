@@ -83,8 +83,9 @@ function SubmitArtwork({ closeModal }) {
             </label>
             <br />
             <label>
-              Category:
+              Category: <br></br>
               <select name="category" value={formData.category} onChange={handleChange}>
+                <option>--Select--</option>
                 <option value="AI_ART">Ai Art</option>
                 <option value="TWOD_DIGITAL_PAINTING">2D Digital Painting</option>
                 <option value="THREED_DIGITAL_PAINTING">3D Digital Painting</option>
@@ -111,10 +112,7 @@ function SubmitArtwork({ closeModal }) {
             <br />
             <div className="d-flex justify-content-end">
               <Button type="submit" color="primary">
-                Invia
-              </Button>
-              <Button color="secondary" onClick={toggleModal} className="ml-2">
-                Chiudi
+                Submit
               </Button>
             </div>
           </form>
@@ -156,13 +154,17 @@ function ListNames() {
       <Link to="/">
         <img className="logo mb-4" src={logo} alt="logo Reart" style={{ width: "200px" }} />
       </Link>
-      <List icon={FaHome} name="Home" active={activeItem === "Home"} onItemClick={() => handleItemClick("Home")} />
-      <List
-        icon={BiCategoryAlt}
-        name="Categories"
-        active={activeItem === "Categories"}
-        onItemClick={() => handleItemClick("Categories")}
-      />
+      <Link to="/" className="text-decoration-none" style={{ color: "inherit" }}>
+        <List icon={FaHome} name="Home" active={activeItem === "Home"} onItemClick={() => handleItemClick("Home")} />
+      </Link>
+      <Link to="/" className="text-decoration-none" style={{ color: "inherit" }}>
+        <List
+          icon={BiCategoryAlt}
+          name="Categories"
+          active={activeItem === "Categories"}
+          onItemClick={() => handleItemClick("Categories")}
+        />{" "}
+      </Link>
       <List
         icon={BsPlusLg}
         name="Submit"
