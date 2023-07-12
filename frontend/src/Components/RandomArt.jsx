@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, CardBody } from "reactstrap";
-import LikeDislike from "./LikeDislike";
+import LikeDislike from "./LikeButton";
 import UserPropic from "./UserPropic";
 
 function RandomArtwork() {
@@ -76,7 +76,7 @@ function RandomArtwork() {
             <p className="card-text white">@{artwork.user.username}</p>
           </div>
           <p className="fw-bold text-white d-flex gap-1">
-            {abbreviate(artwork.likes)} <LikeDislike artworkId={artwork.id} />
+            {abbreviate(artwork.likeCount)} <LikeDislike artworkId={artwork.id} />
           </p>
         </div>
         <div className="d-flex justify-content-between">

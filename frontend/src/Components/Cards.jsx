@@ -1,7 +1,7 @@
 import { Col, Row } from "reactstrap";
 import React, { useState, useEffect } from "react";
 import UserPropic from "./UserPropic";
-import LikeDislike from "./LikeDislike";
+import LikeButton from "./LikeButton";
 
 function Cards() {
   const [artworks, setArtworks] = useState([]);
@@ -72,7 +72,7 @@ function Cards() {
                     <p className="card-text white">@{artwork.user.username}</p>
                   </div>
                   <p className="fw-bold text-white d-flex gap-1">
-                    {abbreviate(artwork.likes)} <LikeDislike artworkId={artwork.id} />
+                    {abbreviate(artwork.likeCount)} <LikeButton artworkId={artwork.id} />
                   </p>
                 </div>
                 <div className="d-flex justify-content-between">

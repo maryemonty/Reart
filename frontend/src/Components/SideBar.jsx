@@ -1,6 +1,20 @@
 import { useState } from "react";
-import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
-import { FaHome } from "react-icons/fa";
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  Nav,
+  NavItem,
+} from "reactstrap";
+import { FaBars, FaHome } from "react-icons/fa";
 import { BiCategoryAlt } from "react-icons/bi";
 import { BsPlusLg } from "react-icons/bs";
 import logo from "../logo.png";
@@ -10,7 +24,6 @@ import { useSelector } from "react-redux";
 function SubmitArtwork({ closeModal }) {
   const token = useSelector((state) => state.user.token);
   const id = useSelector((state) => state.profile.id);
-  console.log(id);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -61,30 +74,32 @@ function SubmitArtwork({ closeModal }) {
       <Modal isOpen={true} toggle={toggleModal}>
         <ModalHeader toggle={toggleModal}>Modale</ModalHeader>
         <ModalBody>
-          <form onSubmit={handleSubmit}>
-            <label>
-              Title:
-              <input type="text" name="title" value={formData.title} onChange={handleChange} />
-            </label>
-            <br />
-            <label>
-              Description:
-              <input type="text" name="description" value={formData.description} onChange={handleChange} />
-            </label>
-            <br />
-            <label>
-              Art:
-              <input type="text" name="art" value={formData.art} onChange={handleChange} />
-            </label>
-            <br />
-            <label>
-              Price:
-              <input type="text" name="price" value={formData.price} onChange={handleChange} />
-            </label>
-            <br />
-            <label>
-              Category: <br></br>
-              <select name="category" value={formData.category} onChange={handleChange}>
+          <Form onSubmit={handleSubmit}>
+            <FormGroup>
+              <Label for="title">Title:</Label>
+              <Input type="text" name="title" id="title" value={formData.title} onChange={handleChange} />
+            </FormGroup>
+            <FormGroup>
+              <Label for="description">Description:</Label>
+              <Input
+                type="text"
+                name="description"
+                id="description"
+                value={formData.description}
+                onChange={handleChange}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label for="art">Art:</Label>
+              <Input type="text" name="art" id="art" value={formData.art} onChange={handleChange} />
+            </FormGroup>
+            <FormGroup>
+              <Label for="price">Price:</Label>
+              <Input type="text" name="price" id="price" value={formData.price} onChange={handleChange} />
+            </FormGroup>
+            <FormGroup>
+              <Label for="category">Category:</Label>
+              <Input type="select" name="category" id="category" value={formData.category} onChange={handleChange}>
                 <option>--Select--</option>
                 <option value="AI_ART">Ai Art</option>
                 <option value="TWOD_DIGITAL_PAINTING">2D Digital Painting</option>
@@ -107,15 +122,14 @@ function SubmitArtwork({ closeModal }) {
                 <option value="INTEGRATED_ART">Integrated Art</option>
                 <option value="MIXED_MEDIA">Mixed Media</option>
                 <option value="COMPUTER_GENERATED_DIGITAL_PAINTING">Computer Generated Digital Painting</option>
-              </select>
-            </label>
-            <br />
+              </Input>
+            </FormGroup>
             <div className="d-flex justify-content-end">
               <Button type="submit" color="primary">
                 Submit
               </Button>
             </div>
-          </form>
+          </Form>
         </ModalBody>
       </Modal>
     </div>
@@ -136,6 +150,11 @@ function List({ icon: Icon, name, active, onItemClick }) {
 function ListNames() {
   const [activeItem, setActiveItem] = useState("Home");
   const [showModal, setShowModal] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
+
+  const toggleNavbar = () => {
+    setCollapsed(!collapsed);
+  };
 
   const handleItemClick = (itemName) => {
     setActiveItem(itemName);
@@ -146,42 +165,58 @@ function ListNames() {
 
   const closeModal = () => {
     setShowModal(false);
-    setActiveItem("Home"); // Imposta l'elemento "Home" come attivo dopo la chiusura del modale
+    setActiveItem("Home");
   };
 
   return (
-    <>
-      <Link to="/">
-        <img className="logo mb-4" src={logo} alt="logo Reart" style={{ width: "200px" }} />
+    <div className="d-flex flex-column">
+      <Link to="/" className="text-decoration-none">
+        <img className="logo mb-4" src={logo} alt="logo Reart" style={{ maxWidth: "200px" }} />
       </Link>
-      <Link to="/" className="text-decoration-none" style={{ color: "inherit" }}>
-        <List icon={FaHome} name="Home" active={activeItem === "Home"} onItemClick={() => handleItemClick("Home")} />
-      </Link>
-      <Link to="/" className="text-decoration-none" style={{ color: "inherit" }}>
-        <List
-          icon={BiCategoryAlt}
-          name="Categories"
-          active={activeItem === "Categories"}
-          onItemClick={() => handleItemClick("Categories")}
-        />{" "}
-      </Link>
-      <List
-        icon={BsPlusLg}
-        name="Submit"
-        active={activeItem === "Submit"}
-        onItemClick={() => handleItemClick("Submit")}
-      />
+      <Navbar expand="md">
+        <NavbarToggler onClick={toggleNavbar} className="position-relative border-0" style={{ boxShadow: "none" }}>
+          <FaBars style={{ color: "white", bottom: "65px", left: "205px" }} className="position-absolute border-0" />
+        </NavbarToggler>
+        <Collapse isOpen={!collapsed} navbar>
+          <Nav className="flex-column" navbar>
+            <NavItem>
+              <Link to="/" className="text-decoration-none">
+                <List
+                  icon={FaHome}
+                  name="Home"
+                  active={activeItem === "Home"}
+                  onItemClick={() => handleItemClick("Home")}
+                />
+              </Link>
+            </NavItem>
+            <NavItem>
+              <Link to="/" className="text-decoration-none">
+                <List
+                  icon={BiCategoryAlt}
+                  name="Categories"
+                  active={activeItem === "Categories"}
+                  onItemClick={() => handleItemClick("Categories")}
+                />
+              </Link>
+            </NavItem>
+            <NavItem>
+              <List
+                icon={BsPlusLg}
+                name="Submit"
+                active={activeItem === "Submit"}
+                onItemClick={() => handleItemClick("Submit")}
+              />
+            </NavItem>
+          </Nav>
+        </Collapse>
+      </Navbar>
       {showModal && <SubmitArtwork closeModal={closeModal} />}
-    </>
+    </div>
   );
 }
 
 function Sidebar() {
-  return (
-    <div className="d-flex flex-column">
-      <ListNames />
-    </div>
-  );
+  return <ListNames />;
 }
 
 export default Sidebar;

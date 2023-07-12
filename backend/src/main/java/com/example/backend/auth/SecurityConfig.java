@@ -30,6 +30,7 @@ public class SecurityConfig {
 		// permitAll() don't //
 		// need
 		// authorization
+		http.authorizeHttpRequests(auth -> auth.requestMatchers("/like/**").permitAll());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/users/**").permitAll());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/profile/**").permitAll());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll());

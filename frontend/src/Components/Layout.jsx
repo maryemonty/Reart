@@ -24,7 +24,7 @@ function Layout() {
             <Route path={"/settings/:id"} element={<Settings />} />
           </Routes>
         </Col>
-        <Col>
+        <Col lg={2}>
           <RightBar />
           <TopArtist />
         </Col>

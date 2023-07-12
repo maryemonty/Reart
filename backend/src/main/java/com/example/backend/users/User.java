@@ -9,6 +9,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.backend.artwork.Artwork;
+import com.example.backend.like.Like;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -40,7 +42,12 @@ public class User implements UserDetails {
 	private Role role;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties({ "user", "likes" })
 	private List<Artwork> artworks;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties({ "user", "likes" })
+	private List<Like> likes;
 
 	public User(String username, String name, String surname, String email, String password) {
 		this.username = username;
@@ -98,4 +105,5 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
+
 }

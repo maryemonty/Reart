@@ -29,7 +29,7 @@ public class ArtworkService {
 	public Artwork create(UUID userId, Artwork artwork) {
 		User user = findByUserId(userId);
 		Artwork newArtwork = new Artwork(artwork.getTitle(), artwork.getDescription(), artwork.getArt(),
-				artwork.getCategory(), artwork.getPrice(), user, artwork.getLikes());
+				artwork.getCategory(), artwork.getPrice(), user, 0);
 		return artworkRepository.save(newArtwork);
 	}
 
@@ -51,6 +51,12 @@ public class ArtworkService {
 		artwork.setUser(user);
 
 		return artworkRepository.save(artwork);
+	}
+
+	public void incrementLikeCount(UUID id) throws NotFound {
+		Artwork artwork = findById(id);
+		artwork.setLikeCount(artwork.getLikeCount() + 1);
+		artworkRepository.save(artwork);
 	}
 
 	public void findByIdAndDelete(UUID id) throws NotFound {
