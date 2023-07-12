@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useSelector } from "react-redux";
 
@@ -11,65 +11,93 @@ const LikeButton = ({ artworkId }) => {
 
   const handleClick = () => {
     if (liked) {
-      removeLike();
+      removeLike()
+        .then(() => setLiked(false))
+        .catch((error) => console.error("Errore durante la rimozione del like", error));
     } else {
-      addLike();
+      addLike()
+        .then(() => setLiked(true))
+        .catch((error) => console.error("Errore durante l'aggiunta del like", error));
     }
   };
 
-  const addLike = async () => {
-    try {
-      const response = await fetch(`http://localhost:8080/like/${userId}/${artworkId}`, {
+  const addLike = () => {
+    return new Promise((resolve, reject) => {
+      fetch(`http://localhost:8080/like/${userId}/${artworkId}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({}),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setLiked(true);
-        setLikeId(data.id);
-        console.log(likeId);
-      } else {
-        console.error("Errore durante l'aggiunta del like");
-      }
-    } catch (error) {
-      console.error("Errore nella richiesta HTTP:", error);
-    }
+      })
+        .then((response) => {
+          if (response.ok) {
+            resolve();
+          } else {
+            reject(new Error("Errore durante l'aggiunta del like"));
+          }
+        })
+        .catch((error) => {
+          reject(new Error("Errore nella richiesta HTTP:", error));
+        });
+    });
   };
 
-  const removeLike = async () => {
-    try {
-      const response = await fetch(`http://localhost:8080/like/${likeId}`, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        setLiked(false);
-      } else {
-        console.error("Errore durante la rimozione del like");
-      }
-    } catch (error) {
-      console.error("Errore nella richiesta HTTP:", error);
-    }
+  const removeLike = () => {
+    return new Promise((resolve, reject) => {
+      fetch(`http://localhost:8080/like/${userId}/${artworkId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setLikeId(data.id);
+          console.log(data.id);
+        })
+        .then(() => {
+          fetch(`http://localhost:8080/like/${likeId}/${artworkId}`, {
+            method: "DELETE",
+          })
+            .then((response) => {
+              if (response.ok) {
+                resolve();
+              } else {
+                reject(new Error("Errore durante la rimozione del like"));
+              }
+            })
+            .catch((error) => {
+              reject(new Error("Errore nella richiesta HTTP:", error));
+            });
+        })
+        .catch((error) => {
+          reject(new Error("Errore durante la rimozione del like", error));
+        });
+    });
   };
 
   useEffect(() => {
-    const checkLikeStatus = async () => {
-      try {
-        const response = await fetch(`http://localhost:8080/like/${userId}/${artworkId}`);
-        if (response.ok) {
-          setLiked(true);
-        }
-      } catch (error) {
-        console.error("Errore nella richiesta HTTP:", error);
-      }
+    const checkLikeStatus = () => {
+      return new Promise((resolve, reject) => {
+        fetch(`http://localhost:8080/like/${userId}/${artworkId}`)
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              reject(new Error("Errore durante la verifica dello stato del like"));
+            }
+          })
+          .then((data) => {
+            setLikeId(data.id);
+            console.log(data.id);
+            resolve();
+          })
+          .catch((error) => {
+            reject(new Error("Errore nella richiesta HTTP:", error));
+          });
+      });
     };
 
-    checkLikeStatus();
+    checkLikeStatus()
+      .then(() => setLiked(true))
+      .catch((error) => console.error("Errore nella verifica dello stato del like", error));
   }, [userId, artworkId]);
 
   return (

@@ -7,6 +7,7 @@ import TopArtist from "./TopArtist";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import YourAccount from "./YourAccount";
 import Settings from "./Settings";
+import Categories from "./Categories";
 
 function Layout() {
   return (
@@ -20,7 +21,7 @@ function Layout() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path={"/youraccount/:user"} element={<YourAccount />} />
-            <Route path={"/categories"} element={<YourAccount />} />
+            <Route path={"/categories"} element={<Categories />} />
             <Route path={"/settings/:id"} element={<Settings />} />
           </Routes>
         </Col>

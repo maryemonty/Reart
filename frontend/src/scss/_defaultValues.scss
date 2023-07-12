@@ -13,6 +13,14 @@ $gradient-button: linear-gradient(
 
 $margin-top: 1rem;
 
+.zoom:hover {
+  transform: scale(1.01);
+  cursor: pointer;
+  z-index: 3;
+}
+.mb-6 {
+  margin-bottom: 6rem;
+}
 .white {
   color: $white-color;
 }

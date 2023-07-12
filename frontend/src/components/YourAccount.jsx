@@ -67,7 +67,7 @@ function YourAccount() {
         </div>
       </div>
       <hr></hr>
-      <MyArtworks />
+      {/* <MyArtworks /> */}
     </div>
   );
 }

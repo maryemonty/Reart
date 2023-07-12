@@ -55,7 +55,8 @@ public class LikeService {
 		return likeRepository.findById(id).orElseThrow(() -> new NotFound("User not found"));
 	}
 
-	public void delete(UUID id) throws NotFound {
+	public void delete(UUID id, UUID artworkId) throws NotFound {
+		artworkService.decrementLikeCount(artworkId);
 		Like like = findById(id);
 		likeRepository.delete(like);
 	}

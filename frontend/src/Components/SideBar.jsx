@@ -190,7 +190,7 @@ function ListNames() {
               </Link>
             </NavItem>
             <NavItem>
-              <Link to="/" className="text-decoration-none">
+              <Link to="/categories" className="text-decoration-none">
                 <List
                   icon={BiCategoryAlt}
                   name="Categories"

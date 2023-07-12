@@ -59,6 +59,12 @@ public class ArtworkService {
 		artworkRepository.save(artwork);
 	}
 
+	public void decrementLikeCount(UUID id) throws NotFound {
+		Artwork artwork = findById(id);
+		artwork.setLikeCount(artwork.getLikeCount() - 1);
+		artworkRepository.save(artwork);
+	}
+
 	public void findByIdAndDelete(UUID id) throws NotFound {
 		Artwork artwork = findById(id);
 		artworkRepository.delete(artwork);

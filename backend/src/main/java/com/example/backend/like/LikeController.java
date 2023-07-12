@@ -49,10 +49,10 @@ public class LikeController {
 		return likeService.create(userId, artworkId, like);
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id}/{artworkId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void like(@PathVariable UUID id) {
-		likeService.delete(id);
+	public void like(@PathVariable UUID id, @PathVariable UUID artworkId) {
+		likeService.delete(id, artworkId);
 	}
 
 }
