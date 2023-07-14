@@ -54,14 +54,12 @@ function SubmitArtwork({ closeModal }) {
       .then((response) => response.json())
       .then((data) => {
         console.log("Artwork submitted successfully:", data);
-        // Esegui altre operazioni dopo l'invio del form
       })
       .catch((error) => {
         console.error("Error submitting artwork:", error);
-        // Gestisci l'errore di invio del form
       })
       .finally(() => {
-        closeModal(); // Chiudi il modale dopo l'invio del form
+        closeModal();
       });
   };
 
@@ -137,17 +135,21 @@ function SubmitArtwork({ closeModal }) {
 }
 
 function List({ icon: Icon, name, active, onItemClick }) {
-  const classes = `nav-link d-flex align-items-center px-3 gap-3 ${active ? "border-active" : "border-no-active"}`;
+  const classes = `nav-link d-flex align-items-center px-3 gap-3 ${
+    active ? "border-active text-white" : "border-no-active"
+  }`;
   const iconStyle = active ? "icon-active my-2" : "icon my-2";
+  const nameStyle = active ? "text-white" : "";
 
   return (
     <div className={classes} onClick={onItemClick}>
-      <Icon className={iconStyle} /> {name}
+      <Icon className={iconStyle} /> <span className={nameStyle}>{name}</span>
     </div>
   );
 }
 
 function ListNames() {
+  const token = useSelector((state) => state.user.token);
   const [activeItem, setActiveItem] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
@@ -176,7 +178,6 @@ function ListNames() {
     if (path === "/categories" || path === "/") {
       setActiveItem(path === "/categories" ? "Categories" : "Home");
     } else {
-      // Naviga verso il percorso corrente per forzare l'aggiornamento dell'elemento attivo
       navigate(path);
     }
   };
@@ -212,14 +213,16 @@ function ListNames() {
                 />
               </Link>
             </NavItem>
-            <NavItem>
-              <List
-                icon={BsPlusLg}
-                name="Submit"
-                active={activeItem === "Submit"}
-                onItemClick={() => handleItemClick("Submit")}
-              />
-            </NavItem>
+            {token && (
+              <NavItem>
+                <List
+                  icon={BsPlusLg}
+                  name="Submit"
+                  active={activeItem === "Submit"}
+                  onItemClick={() => handleItemClick("Submit")}
+                />
+              </NavItem>
+            )}
           </Nav>
         </Collapse>
       </Navbar>
