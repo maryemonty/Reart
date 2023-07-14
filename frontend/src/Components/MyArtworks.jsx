@@ -84,7 +84,7 @@ function MyArtworks() {
                   {artwork.category.replace(/_/g, " ").replace(/TWO/g, "2").replace(/THREE/g, "3")}
                 </p>
                 <p className="fw-bold text-white d-flex gap-1">
-                  {abbreviate(artwork.likes)} <LikeButton artworkId={artwork.id} />
+                  {abbreviate(artwork.likeCount)} <LikeButton artworkId={artwork.id} />
                 </p>
               </div>
               <div className="d-flex justify-content-between">

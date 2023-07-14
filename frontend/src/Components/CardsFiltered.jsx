@@ -1,8 +1,6 @@
 import { Card, CardBody } from "reactstrap";
 import UserPropic from "./UserPropic";
 import LikeButton from "./LikeButton";
-import { Link } from "react-router-dom";
-import { BiArrowBack } from "react-icons/bi";
 
 function CardsFiltered({ selectedCategory, artworks }) {
   const filteredArtworks = artworks.filter((artwork) => artwork.category === selectedCategory);

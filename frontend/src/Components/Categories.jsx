@@ -81,7 +81,6 @@ function Categories() {
   ];
   const [selectedCategory, setSelectedCategory] = useState("");
   const [artworks, setArtworks] = useState([]);
-  const [showFilteredCards, setShowFilteredCards] = useState(false);
 
   useEffect(() => {
     fetch("http://localhost:8080/artworks")
@@ -92,8 +91,10 @@ function Categories() {
   const handleCardClick = (category) => {
     setSelectedCategory(category);
   };
+
+  const isCategoryEmpty = artworks.filter((artwork) => artwork.category === selectedCategory).length === 0;
+
   const handleBackClick = () => {
-    setShowFilteredCards(false);
     setSelectedCategory("");
   };
 
@@ -102,7 +103,7 @@ function Categories() {
       {selectedCategory === "" ? (
         images.map((imageUrl, index) => (
           <Card
-            className={`text-bg-dark zoom ${index >= images.length - 3 ? "mb-6" : ""}`}
+            className={`text-bg-dark zoom ${index >= images.length - 1 ? "mb-6" : ""}`}
             key={index}
             onClick={() => handleCardClick(categories[index])}
           >
@@ -121,8 +122,14 @@ function Categories() {
         ))
       ) : (
         <div>
-          <BiArrowBack onClick={handleBackClick} className="zoom" />
-          <CardsFiltered selectedCategory={selectedCategory} artworks={artworks} />
+          <BiArrowBack onClick={handleBackClick} className="fs-1 zoom mb-4 fw-bold" />
+          {isCategoryEmpty ? (
+            <p className="fs-3 fw-bold mt-4 p-3 opacity-25">
+              Nothing here, be the first to submit <br></br>artworks in this category!
+            </p>
+          ) : (
+            <CardsFiltered selectedCategory={selectedCategory} artworks={artworks} />
+          )}
         </div>
       )}
     </div>

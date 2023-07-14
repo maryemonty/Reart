@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Button,
   Modal,
@@ -18,7 +18,7 @@ import { FaBars, FaHome } from "react-icons/fa";
 import { BiCategoryAlt } from "react-icons/bi";
 import { BsPlusLg } from "react-icons/bs";
 import logo from "../logo.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function SubmitArtwork({ closeModal }) {
@@ -148,9 +148,16 @@ function List({ icon: Icon, name, active, onItemClick }) {
 }
 
 function ListNames() {
-  const [activeItem, setActiveItem] = useState("Home");
+  const [activeItem, setActiveItem] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const path = location.pathname;
+    setActiveItem(path === "/categories" ? "Categories" : "Home");
+  }, [location]);
 
   const toggleNavbar = () => {
     setCollapsed(!collapsed);
@@ -165,7 +172,13 @@ function ListNames() {
 
   const closeModal = () => {
     setShowModal(false);
-    setActiveItem("Home");
+    const path = location.pathname;
+    if (path === "/categories" || path === "/") {
+      setActiveItem(path === "/categories" ? "Categories" : "Home");
+    } else {
+      // Naviga verso il percorso corrente per forzare l'aggiornamento dell'elemento attivo
+      navigate(path);
+    }
   };
 
   return (
