@@ -63,7 +63,7 @@ const SignUp = () => {
 
   return (
     <div>
-      <div className={isLoggedIn ? "d-none" : "d-flex justify-content-evenly buttons-user-join mb-5"}>
+      <div className={isLoggedIn ? "d-none" : "d-flex justify-content-evenly buttons-user-join"}>
         <button
           type="button"
           className="border-0 bg-transparent btn-default white rounded"

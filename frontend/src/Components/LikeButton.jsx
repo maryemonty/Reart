@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useSelector } from "react-redux";
 
@@ -75,30 +75,28 @@ const LikeButton = ({ artworkId }) => {
 
   useEffect(() => {
     const checkLikeStatus = () => {
-      return new Promise((resolve, reject) => {
-        fetch(`http://localhost:8080/like/${userId}/${artworkId}`)
+      if (token) {
+        return fetch(`http://localhost:8080/like/${userId}/${artworkId}`)
           .then((response) => {
             if (response.ok) {
               return response.json();
             } else {
-              reject(new Error("Errore durante la verifica dello stato del like"));
+              throw new Error("Errore durante la verifica dello stato del like");
             }
           })
           .then((data) => {
             setLikeId(data.id);
             console.log(data.id);
-            resolve();
+            setLiked(true);
           })
           .catch((error) => {
-            reject(new Error("Errore nella richiesta HTTP:", error));
+            console.error("Errore nella richiesta HTTP:", error);
           });
-      });
+      }
     };
 
-    checkLikeStatus()
-      .then(() => setLiked(true))
-      .catch((error) => console.error("Errore nella verifica dello stato del like", error));
-  }, [userId, artworkId]);
+    checkLikeStatus();
+  }, [token, userId, artworkId]);
 
   return (
     <button className="bg-transparent border-0 text-white" onClick={handleClick}>

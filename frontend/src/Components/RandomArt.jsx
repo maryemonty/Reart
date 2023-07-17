@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { Card, CardBody } from "reactstrap";
-import LikeDislike from "./LikeButton";
 import UserPropic from "./UserPropic";
+import LikeButton from "./LikeButton";
+import { Link } from "react-router-dom";
 
 function RandomArtwork() {
   const [artwork, setArtwork] = useState(null);
+  const [user, setUser] = useState("");
 
   useEffect(() => {
     const fetchRandomArtwork = async () => {
@@ -14,6 +16,7 @@ function RandomArtwork() {
         const randomIndex = Math.floor(Math.random() * data.length);
         const randomArtwork = data[randomIndex];
         setArtwork(randomArtwork);
+        setUser(randomArtwork.user.username);
       } catch (error) {
         console.error("Error fetching random artwork:", error);
       }
@@ -39,7 +42,7 @@ function RandomArtwork() {
   return (
     <Card className="border-0">
       <div className="position-relative">
-        <img src={artwork.art} className="card-img-top" alt="artwork" style={{ objectFit: "cover", height: "174px" }} />
+        <img src={artwork.art} className="card-img-top" alt="artwork" style={{ objectFit: "cover", height: "200px" }} />
         <p
           className="white position-absolute bottom-0 rounded px-4 py-2 fw-bold"
           style={{ backdropFilter: "blur(10px)" }}
@@ -71,12 +74,14 @@ function RandomArtwork() {
           {artwork.category.replace(/_/g, " ").replace(/TWO/g, "2").replace(/THREE/g, "3")}
         </p>
         <div className="d-flex justify-content-between mb-2">
-          <div className="d-flex gap-2 mb-2">
-            <UserPropic userPropic={artwork.user.propic} />
-            <p className="card-text white">@{artwork.user.username}</p>
-          </div>
+          <Link to={"/youraccount/" + user} className=" text-hover">
+            <div className="d-flex gap-2 mb-2">
+              <UserPropic userPropic={artwork.user.propic} />
+              <p className="card-text white">@{artwork.user.username}</p>
+            </div>
+          </Link>
           <p className="fw-bold text-white d-flex gap-1">
-            {abbreviate(artwork.likeCount)} <LikeDislike artworkId={artwork.id} />
+            {abbreviate(artwork.likeCount)} <LikeButton artworkId={artwork.id} />
           </p>
         </div>
         <div className="d-flex justify-content-between">

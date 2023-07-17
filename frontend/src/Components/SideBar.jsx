@@ -16,7 +16,7 @@ import {
 } from "reactstrap";
 import { FaBars, FaHome } from "react-icons/fa";
 import { BiCategoryAlt } from "react-icons/bi";
-import { BsPlusLg } from "react-icons/bs";
+import { BsPlusLg, BsSearchHeart } from "react-icons/bs";
 import logo from "../logo.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -158,7 +158,13 @@ function ListNames() {
 
   useEffect(() => {
     const path = location.pathname;
-    setActiveItem(path === "/categories" ? "Categories" : "Home");
+    if (path === "/categories") {
+      setActiveItem("Categories");
+    } else if (path.startsWith("/searched")) {
+      setActiveItem("Search");
+    } else {
+      setActiveItem("Home");
+    }
   }, [location]);
 
   const toggleNavbar = () => {
@@ -175,8 +181,12 @@ function ListNames() {
   const closeModal = () => {
     setShowModal(false);
     const path = location.pathname;
-    if (path === "/categories" || path === "/") {
-      setActiveItem(path === "/categories" ? "Categories" : "Home");
+    if (path === "/categories") {
+      setActiveItem("Categories");
+    } else if (path === "/") {
+      setActiveItem("Home");
+    } else if (path.startsWith("/searched")) {
+      setActiveItem("Search");
     } else {
       navigate(path);
     }
@@ -210,6 +220,16 @@ function ListNames() {
                   name="Categories"
                   active={activeItem === "Categories"}
                   onItemClick={() => handleItemClick("Categories")}
+                />
+              </Link>
+            </NavItem>
+            <NavItem>
+              <Link to="/searched" className="text-decoration-none">
+                <List
+                  icon={BsSearchHeart}
+                  name="Search"
+                  active={activeItem === "Search"}
+                  onItemClick={() => handleItemClick("Search")}
                 />
               </Link>
             </NavItem>

@@ -21,25 +21,30 @@ function YourAccount() {
     })
       .then((response) => {
         if (response.ok) {
-          console.log("siamo qui ora", response);
           return response.json();
         } else {
-          throw new Error("Errore durante il recupero delle informazioni utente");
+          throw new Error("Error");
         }
       })
       .then((data) => {
         setUsername(data.username);
         setName(data.name);
         setSurname(data.surname);
-        setIsLoading(false); // Imposta isLoading su false quando i dati sono stati ottenuti correttamente
+        setIsLoading(false);
       })
       .catch((error) => {
-        console.log("Errore durante il recupero delle informazioni utente:", error);
+        console.log(error);
       });
-  }, [params.profile]); // Aggiungi params.profile come dipendenza per richiamare l'effetto quando cambia
+  }, [params.profile]);
 
   if (isLoading) {
-    return <div>Loading...</div>; // Mostra un messaggio di caricamento durante il recupero dei dati
+    return (
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border m-5" role="status" style={{ width: "100px", height: "100px" }}>
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -48,7 +53,7 @@ function YourAccount() {
       <img
         src={propic}
         alt="background-image"
-        className="position-absolute top-0 start-0 bottom-0 end-0 vh-100 vw-100 opacity-25 z-n1 "
+        className="position-absolute top-0 start-0 bottom-0 end-0 h-100 w-100 opacity-25 z-n1 "
         style={{ filter: "blur(500px)" }}
       />
       <div className="d-flex align-items-end gap-3 m-5">

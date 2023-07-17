@@ -17,12 +17,13 @@ function Layout() {
           <SideBar />
         </Col>
         <Col lg={8}>
-          <ArtworkSearch />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path={"/youraccount/:user"} element={<YourAccount />} />
             <Route path={"/categories"} element={<Categories />} />
             <Route path={"/settings/:id"} element={<Settings />} />
+            <Route path={"/searched"} element={<ArtworkSearch />} />
+            <Route path={"/searched/:q"} element={<ArtworkSearch />} />
           </Routes>
         </Col>
         <Col lg={2}>

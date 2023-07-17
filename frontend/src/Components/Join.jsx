@@ -62,7 +62,7 @@ const Join = () => {
       {isLoggedIn ? (
         <UserBar email={email} />
       ) : (
-        <div className="d-flex justify-content-evenly buttons-user-join mb-5">
+        <div className="d-flex justify-content-evenly buttons-user-join">
           <button className="bg-transparent btn-join fw-bold rounded" onClick={toggleJoinModal}>
             Join
           </button>

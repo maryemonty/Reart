@@ -69,4 +69,10 @@ public class ArtworkService {
 		Artwork artwork = findById(id);
 		artworkRepository.delete(artwork);
 	}
+
+	public List<Artwork> findByTitle(String title) {
+		List<Artwork> artwork = artworkRepository.findByTitle(title);
+		return artwork;
+	}
+
 }

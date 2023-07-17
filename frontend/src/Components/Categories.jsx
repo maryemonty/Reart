@@ -85,7 +85,9 @@ function Categories() {
   useEffect(() => {
     fetch("http://localhost:8080/artworks")
       .then((response) => response.json())
-      .then((data) => setArtworks(data));
+      .then((data) => {
+        setArtworks(data);
+      });
   }, []);
 
   const handleCardClick = (category) => {

@@ -33,3 +33,15 @@ $margin-top: 1rem;
   background-color: $bg-gradient-button;
   background-image: $gradient-button;
 }
+
+.hovered:hover {
+  box-shadow: 2px 2px black;
+}
+
+.text-hover {
+  text-decoration: none;
+}
+
+.text-hover:hover {
+  text-decoration: underline white;
+}

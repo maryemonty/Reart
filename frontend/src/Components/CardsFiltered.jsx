@@ -1,6 +1,7 @@
 import { Card, CardBody } from "reactstrap";
 import UserPropic from "./UserPropic";
 import LikeButton from "./LikeButton";
+import { Link } from "react-router-dom";
 
 function CardsFiltered({ selectedCategory, artworks }) {
   const filteredArtworks = artworks.filter((artwork) => artwork.category === selectedCategory);
@@ -55,10 +56,12 @@ function CardsFiltered({ selectedCategory, artworks }) {
               {artwork.category.replace(/_/g, " ").replace(/TWO/g, "2").replace(/THREE/g, "3")}
             </p>
             <div className="d-flex justify-content-between mb-2">
-              <div className="d-flex gap-2 mb-2">
-                <UserPropic userPropic={artwork.user.propic} />
-                <p className="card-text white">@{artwork.user.username}</p>
-              </div>
+              <Link to={"/youraccount/" + artwork.user.username} className=" text-hover">
+                <div className="d-flex gap-2 mb-2">
+                  <UserPropic userPropic={artwork.user.propic} />
+                  <p className="card-text white">@{artwork.user.username}</p>
+                </div>
+              </Link>
               <p className="fw-bold text-white d-flex gap-1">
                 {abbreviate(artwork.likeCount)} <LikeButton artworkId={artwork.id} />
               </p>
