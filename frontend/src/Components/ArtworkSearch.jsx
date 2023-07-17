@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Card, CardBody, Col, Row } from "reactstrap";
 import LikeButton from "./LikeButton";
@@ -7,6 +7,13 @@ const ArtworkSearch = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    const path = location.pathname;
+    const match = path.match(/^\/searched\/([^/]+)/);
+    const searchParam = match ? match[1] : "";
+    setSearch(searchParam);
+  }, [location]);
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -116,12 +123,6 @@ const ArtworkSearch = () => {
     );
   };
 
-  useEffect(() => {
-    const path = location.pathname;
-    const searchParam = path.replace("/searched/", "");
-    setSearch(searchParam);
-  }, [location]);
-
   return (
     <div>
       <div className="d-flex">
@@ -129,6 +130,7 @@ const ArtworkSearch = () => {
           className="mt-3 input"
           type="text"
           placeholder="Search"
+          value={search}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
         />

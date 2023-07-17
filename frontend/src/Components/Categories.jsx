@@ -101,14 +101,10 @@ function Categories() {
   };
 
   return (
-    <div className="d-flex flex-wrap vh-100 gap-3" style={{ overflowY: "scroll" }}>
+    <div className="d-flex flex-wrap vh-100 gap-3 p-2" style={{ overflowY: "scroll" }}>
       {selectedCategory === "" ? (
         images.map((imageUrl, index) => (
-          <Card
-            className={`text-bg-dark zoom ${index >= images.length - 1 ? "mb-6" : ""}`}
-            key={index}
-            onClick={() => handleCardClick(categories[index])}
-          >
+          <Card className="text-bg-dark zoom" key={index} onClick={() => handleCardClick(categories[index])}>
             <CardImg
               top
               src={imageUrl}
