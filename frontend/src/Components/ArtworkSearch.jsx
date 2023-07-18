@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Card, CardBody, Col, Row } from "reactstrap";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import { Card, CardBody, Col, Row, Modal, ModalHeader, ModalBody } from "reactstrap";
 import LikeButton from "./LikeButton";
+import UserPropic from "./UserPropic";
 
 const ArtworkSearch = () => {
   const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [selectedArtwork, setSelectedArtwork] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -62,6 +65,16 @@ const ArtworkSearch = () => {
       }
     };
 
+    const handleViewArtwork = (artwork) => {
+      setSelectedArtwork(artwork);
+      setShowModal(true);
+    };
+
+    const closeModal = () => {
+      setShowModal(false);
+      setSelectedArtwork(null);
+    };
+
     return (
       <div className="p-4 m-2">
         <Row>
@@ -94,31 +107,52 @@ const ArtworkSearch = () => {
                   >
                     {artwork.title}
                   </h5>
+                  <p
+                    className="card-text white fs-6"
+                    style={{
+                      maxWidth: "100%",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {artwork.category.replace(/_/g, " ").replace(/TWO/g, "2").replace(/THREE/g, "3")}
+                  </p>
                   <div className="d-flex justify-content-between mb-2">
-                    <p
-                      className="card-text white fs-6"
-                      style={{
-                        maxWidth: "100%",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {artwork.category.replace(/_/g, " ").replace(/TWO/g, "2").replace(/THREE/g, "3")}
-                    </p>
+                    <Link to={"/profile/" + artwork.user.username} className=" text-hover">
+                      <div className="d-flex gap-2 mb-2">
+                        <UserPropic userPropic={artwork.user.propic} />
+                        <p className="card-text white">@{artwork.user.username}</p>
+                      </div>
+                    </Link>
                     <p className="fw-bold text-white d-flex gap-1">
                       {abbreviate(artwork.likeCount)} <LikeButton artworkId={artwork.id} />
                     </p>
                   </div>
                   <div className="d-flex justify-content-between">
                     <button className="white fs-6 px-3 py-1 fw-bold btn-default rounded border-0">Place a bid</button>
-                    <button className="white fs-6 px-3 py-1 fw-bold rounded bg-transparent">View Artwork</button>
+                    <button
+                      className="white fs-6 px-3 py-1 fw-bold rounded bg-transparent"
+                      onClick={() => handleViewArtwork(artwork)}
+                    >
+                      View Artwork
+                    </button>
                   </div>
                 </CardBody>
               </Card>
             </Col>
           ))}
         </Row>
+
+        <Modal isOpen={showModal} toggle={closeModal} contentClassName="glass-modal">
+          <ModalHeader toggle={closeModal} className="text-capitalize">
+            {selectedArtwork?.title}
+          </ModalHeader>
+          <ModalBody>
+            {selectedArtwork && <img src={selectedArtwork.art} alt="Artwork" className="img-fluid mb-2" />}
+            <p className="fs-3 text-white">{selectedArtwork && selectedArtwork.description}</p>
+          </ModalBody>
+        </Modal>
       </div>
     );
   };

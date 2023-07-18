@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.backend.exceptions.BadRequest;
@@ -56,7 +57,8 @@ public class AuthController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable UUID id, @RequestBody @Validated User body) throws NotFound {
+	public ResponseEntity<User> updateUser(@PathVariable UUID id, @RequestBody @Validated User body,
+			@RequestParam("oldPassword") String oldPassword) throws NotFound {
 		User existingUser = userService.findById(id);
 		if (existingUser == null) {
 			throw new NotFound("User not found");
@@ -78,6 +80,9 @@ public class AuthController {
 			existingUser.setEmail(body.getEmail());
 		}
 		if (body.getPassword() != null && !body.getPassword().isEmpty()) {
+			if (!bcrypt.matches(oldPassword, existingUser.getPassword())) {
+				throw new BadRequest("Invalid old password");
+			}
 			existingUser.setPassword(bcrypt.encode(body.getPassword()));
 		}
 

@@ -1,11 +1,10 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { MdModeEdit } from "react-icons/md";
-import { Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
+import { Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button, Toast, ToastHeader, Fade } from "reactstrap";
 
 const Settings = () => {
-  const dispatch = useDispatch();
   const params = useParams();
   const profile = useSelector((state) => state.profile);
   const token = useSelector((state) => state.token);
@@ -16,14 +15,28 @@ const Settings = () => {
   const [newSurname, setNewSurname] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [newPropic, setNewPropic] = useState(null); // Cambiato da string a null
+  const [newPropic, setNewPropic] = useState(null);
+  const [oldPassword, setOldPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [editUsername, setEditUsername] = useState(false);
   const [editName, setEditName] = useState(false);
   const [editSurname, setEditSurname] = useState(false);
   const [editEmail, setEditEmail] = useState(false);
-  const [editPropic, setEditPropic] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
+  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
 
   const updateUser = () => {
     const updatedFields = {
@@ -33,6 +46,7 @@ const Settings = () => {
       email: newEmail || profile.email,
       password: newPassword || profile.password,
       propic: newPropic || profile.propic,
+      oldPassword: oldPassword,
     };
 
     fetch(url, {
@@ -45,28 +59,42 @@ const Settings = () => {
     })
       .then((response) => {
         if (!response.ok) {
+          setToastMessage("Error updating user");
           throw new Error("Error updating user");
         }
         return response.json();
       })
       .then((data) => {
-        console.log("User updated successfully:", data);
+        setToastMessage("User updated successfully");
+        setShowToast(true);
       })
       .catch((error) => {
         console.log(error.message);
       });
   };
 
-  const handlePropicChange = (e) => {
-    const file = e.target.files[0];
-    const objectURL = URL.createObjectURL(file); // Converti l'immagine in un URL
-
-    setNewPropic(objectURL); // Imposta l'URL come newPropic
+  const toggleProfileModal = () => {
+    setProfileModalOpen(!profileModalOpen);
   };
 
-  const toggleModal = () => {
-    setModalOpen(!modalOpen);
-    setEditPropic(true);
+  const togglePasswordModal = () => {
+    setPasswordModalOpen(!passwordModalOpen);
+    setPasswordError(false);
+  };
+
+  const handlePasswordUpdate = () => {
+    if (oldPassword !== profile.password) {
+      setPasswordError(true);
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordError(true);
+      return;
+    }
+
+    setNewPassword(newPassword);
+    togglePasswordModal();
   };
 
   return (
@@ -82,16 +110,21 @@ const Settings = () => {
           <MdModeEdit
             className="position-absolute end-0 bottom-0 white rounded-circle p-1 border bg-black"
             style={{ height: "25px", width: "25px" }}
-            onClick={toggleModal}
+            onClick={toggleProfileModal}
           />
         </div>
-        <Modal isOpen={modalOpen} toggle={toggleModal}>
-          <ModalHeader toggle={toggleModal}>Update Profile Picture</ModalHeader>
+        <Modal isOpen={profileModalOpen} toggle={toggleProfileModal}>
+          <ModalHeader toggle={toggleProfileModal}>Update Profile Picture</ModalHeader>
           <ModalBody>
-            <input type="file" accept="image/*" onChange={handlePropicChange} />
+            <input
+              type="text"
+              placeholder="http://..."
+              accept="image/*"
+              onChange={(e) => setNewPropic(e.target.value)}
+            />
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={toggleModal}>
+            <Button color="primary" onClick={toggleProfileModal}>
               Cancel
             </Button>
           </ModalFooter>
@@ -138,16 +171,82 @@ const Settings = () => {
             </>
           )}
         </div>
-        <hr />
-        <div className="position-relative">
-          <button className="mb-3" onClick={() => setNewPassword(true)}>
-            Change your password
-          </button>
-        </div>
-        <button className="btn-default white border-0 p-2" onClick={updateUser}>
+        <button className="mb-3 btn btn-outline-light mt-2" onClick={togglePasswordModal}>
+          Change your password
+        </button>
+        <button className="btn-default white border-0 p-2 d-block btn" onClick={updateUser}>
           Update
         </button>
+        <hr />
+        <div className="position-relative">
+          <button className="mb-3 btn btn-danger" onClick={() => setNewPassword(true)}>
+            Delete your account
+          </button>
+        </div>
       </Col>
+
+      <div className="toast-container position-fixed top-50 start-50 translate-middle p-3">
+        <Fade in={showToast} className="fade-transition">
+          <Toast isOpen={showToast} onClose={() => setShowToast(false)}>
+            <ToastHeader toggle={() => setShowToast(false)}>{toastMessage}</ToastHeader>
+          </Toast>
+        </Fade>
+      </div>
+
+      <Modal isOpen={passwordModalOpen} toggle={togglePasswordModal}>
+        <ModalHeader toggle={togglePasswordModal}>Change Password</ModalHeader>
+        <ModalBody>
+          <div className="mb-3">
+            <label htmlFor="oldPassword" className="form-label">
+              Old Password
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              id="oldPassword"
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="newPassword" className="form-label">
+              New Password
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              id="newPassword"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="confirmPassword" className="form-label">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </div>
+          {passwordError && (
+            <div className="text-danger">
+              Old password is incorrect or new password and confirm password do not match.
+            </div>
+          )}
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={togglePasswordModal}>
+            Cancel
+          </Button>
+          <Button color="primary" onClick={handlePasswordUpdate}>
+            Update
+          </Button>
+        </ModalFooter>
+      </Modal>
     </Row>
   );
 };

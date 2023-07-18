@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ArtworkRepository extends JpaRepository<Artwork, UUID> {
 
-	List<Artwork> findByTitle(String title);
+	List<Artwork> findByTitleContaining(String title);
 }

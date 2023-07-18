@@ -70,8 +70,8 @@ public class ArtworkService {
 		artworkRepository.delete(artwork);
 	}
 
-	public List<Artwork> findByTitle(String title) {
-		List<Artwork> artwork = artworkRepository.findByTitle(title);
+	public List<Artwork> findByTitleContaining(String title) {
+		List<Artwork> artwork = artworkRepository.findByTitleContaining(title);
 		return artwork;
 	}
 

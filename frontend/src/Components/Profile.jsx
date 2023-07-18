@@ -3,18 +3,17 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import MyArtworks from "./MyArtworks";
 
-function YourAccount() {
+function Profile() {
   const token = useSelector((state) => state.user.token);
-  const propic = useSelector((state) => state.profile.propic);
   const params = useParams();
-  console.log(params.user);
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
+  const [propic, setPropic] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/profile/${params.user}`, {
+    fetch(`http://localhost:8080/users/${params.user}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -30,6 +29,7 @@ function YourAccount() {
         setUsername(data.username);
         setName(data.name);
         setSurname(data.surname);
+        setPropic(data.propic);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -72,9 +72,9 @@ function YourAccount() {
         </div>
       </div>
       <hr></hr>
-      <MyArtworks />
+      <MyArtworks username={username} />
     </div>
   );
 }
 
-export default YourAccount;
+export default Profile;

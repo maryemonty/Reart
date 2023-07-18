@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import UserPropic from "./UserPropic";
+import { Link } from "react-router-dom";
 
 function TopArtistCards() {
   const token = useSelector((state) => state.user.token);
@@ -18,7 +19,7 @@ function TopArtistCards() {
         const artistsWithLikes = data
           .filter((user) => user.artworks.length > 0)
           .map((user) => {
-            const totalLikes = user.artworks.reduce((sum, artwork) => sum + artwork.likes, 0);
+            const totalLikes = user.artworks.reduce((sum, artwork) => sum + artwork.likeCount, 0);
             return { ...user, totalLikes };
           });
 
@@ -33,32 +34,39 @@ function TopArtistCards() {
   return (
     <>
       {topArtists.map((artist, index) => (
-        <div key={artist.id} className="d-flex gap-3 align-items-center default-bg-color rounded px-1 mb-3 ">
-          <p className="m-0">#0{index + 1}</p>
-          <UserPropic userPropic={artist.propic} />
-          <div>
-            <p
-              className="m-0 white text-capitalize text-white"
-              style={{
-                maxWidth: "100%",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-            >{`${artist.name} ${artist.surname}`}</p>
-            <p
-              className="m-0"
-              style={{
-                maxWidth: "100%",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-            >
-              @{artist.username}
-            </p>
+        <Link
+          to={"/profile/" + artist.username}
+          className="text-decoration-none"
+          key={artist.id}
+          style={{ color: "inherit" }}
+        >
+          <div k className="d-flex gap-3 align-items-center default-bg-color rounded px-1 mb-3 ">
+            <p className="m-0">#0{index + 1}</p>
+            <UserPropic userPropic={artist.propic} />
+            <div>
+              <p
+                className="m-0 white text-capitalize text-white"
+                style={{
+                  maxWidth: "100%",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >{`${artist.name} ${artist.surname}`}</p>
+              <p
+                className="m-0"
+                style={{
+                  maxWidth: "100%",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                @{artist.username}
+              </p>
+            </div>
           </div>
-        </div>
+        </Link>
       ))}
     </>
   );

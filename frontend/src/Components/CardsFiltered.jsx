@@ -1,10 +1,24 @@
-import { Card, CardBody } from "reactstrap";
+import React, { useState } from "react";
+import { Card, CardBody, Modal, ModalHeader, ModalBody } from "reactstrap";
 import UserPropic from "./UserPropic";
 import LikeButton from "./LikeButton";
 import { Link } from "react-router-dom";
 
 function CardsFiltered({ selectedCategory, artworks }) {
   const filteredArtworks = artworks.filter((artwork) => artwork.category === selectedCategory);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedArtwork, setSelectedArtwork] = useState(null);
+
+  const handleViewArtwork = (artwork) => {
+    setSelectedArtwork(artwork);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedArtwork(null);
+  };
+
   function abbreviate(n) {
     if (n >= 1000000) {
       return (n / 1000000).toFixed(1) + "M";
@@ -14,6 +28,7 @@ function CardsFiltered({ selectedCategory, artworks }) {
       return n.toString();
     }
   }
+
   return (
     <div>
       {filteredArtworks.map((artwork) => (
@@ -56,7 +71,7 @@ function CardsFiltered({ selectedCategory, artworks }) {
               {artwork.category.replace(/_/g, " ").replace(/TWO/g, "2").replace(/THREE/g, "3")}
             </p>
             <div className="d-flex justify-content-between mb-2">
-              <Link to={"/youraccount/" + artwork.user.username} className=" text-hover">
+              <Link to={"/profile/" + artwork.user.username} className=" text-hover">
                 <div className="d-flex gap-2 mb-2">
                   <UserPropic userPropic={artwork.user.propic} />
                   <p className="card-text white">@{artwork.user.username}</p>
@@ -66,13 +81,28 @@ function CardsFiltered({ selectedCategory, artworks }) {
                 {abbreviate(artwork.likeCount)} <LikeButton artworkId={artwork.id} />
               </p>
             </div>
-            <div className="d-flex justify-content-between">
+            <div className="d-flex justify-content-between gap-3">
               <button className="white fs-6 px-3 py-1 fw-bold btn-default rounded border-0">Place a bid</button>
-              <button className="white fs-6 px-3 py-1 fw-bold rounded bg-transparent">View Artwork</button>
+              <button
+                className="white fs-6 px-3 py-1 fw-bold rounded bg-transparent"
+                onClick={() => handleViewArtwork(artwork)}
+              >
+                View Artwork
+              </button>
             </div>
           </CardBody>
         </Card>
       ))}
+
+      <Modal isOpen={showModal} toggle={closeModal} contentClassName="glass-modal">
+        <ModalHeader toggle={closeModal} className="text-capitalize">
+          {selectedArtwork?.title}
+        </ModalHeader>
+        <ModalBody>
+          {selectedArtwork && <img src={selectedArtwork.art} alt="Artwork" className="img-fluid mb-2" />}
+          <p className="fs-3 text-white">{selectedArtwork && selectedArtwork.description}</p>
+        </ModalBody>
+      </Modal>
     </div>
   );
 }

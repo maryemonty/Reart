@@ -14,8 +14,8 @@ function Home() {
       <h1 className="fs-1 white fw-bold mb-0">Home</h1>
       <h3 className="fs-6 mb-3">Buy and sell your digital artwork!</h3>
       <Row className="mb-5 me-1">
-        <div className="d-flex align-content-stretch flex-wrap gap-2">
-          <Col lg={7}>
+        <div className="d-flex align-content-stretch gap-1">
+          <Col lg={8}>
             <Card className="text-bg-dark mb-1 h-100">
               <CardImg src={BannerBackground} className="card-img h-100" />
               <CardImgOverlay>

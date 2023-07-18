@@ -68,7 +68,7 @@ const Join = () => {
           </button>
         </div>
       )}
-      <Modal isOpen={joinModal} toggle={toggleJoinModal} contentClassName="default-bg-color">
+      <Modal isOpen={joinModal} toggle={toggleJoinModal}>
         <ModalHeader className="border-0" toggle={toggleJoinModal}>
           Join
         </ModalHeader>
@@ -77,24 +77,22 @@ const Join = () => {
             <div>
               <label htmlFor="email">Email:</label>
               <input
-                placeholder="Inserisci la tua email qui"
+                placeholder="Email here"
                 type="email"
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
               />
             </div>
             <div>
               <label htmlFor="password">Password:</label>
               <div className="position-relative">
                 <input
-                  placeholder="Inserisci la tua password qui"
+                  placeholder="Password here"
                   type={showPassword ? "text" : "password"}
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  required
                 />
                 {showPassword ? (
                   <AiOutlineEyeInvisible
@@ -112,9 +110,6 @@ const Join = () => {
               </div>
             </div>
             <ModalFooter className="border-0">
-              <Button onClick={toggleJoinModal} className="btn-join bg-transparent">
-                Close
-              </Button>
               <Button type="submit" className="btn-default border-0">
                 Join
               </Button>

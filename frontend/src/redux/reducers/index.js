@@ -14,9 +14,6 @@ const initialState = {
   artwork: {
     id: "",
   },
-  search: {
-    title: "",
-  },
 };
 
 const mainReducer = (state = initialState, action) => {
@@ -93,14 +90,6 @@ const mainReducer = (state = initialState, action) => {
           id: action.payload,
         },
       };
-    case "SET_SEARCH":
-      return {
-        ...state,
-        search: {
-          ...state.search,
-          title: action.payload,
-        },
-      };
     default:
       return state;
   }
@@ -141,10 +130,6 @@ export const setNewPropic = (propic) => ({
 export const setArtworkId = (id) => ({
   type: "SET_ARTWORKID",
   payload: id,
-});
-export const setSearch = (title) => ({
-  type: "SET_SEARCH",
-  payload: title,
 });
 
 export default mainReducer;

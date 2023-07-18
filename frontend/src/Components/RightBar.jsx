@@ -4,7 +4,7 @@ import SignUp from "./SignUp";
 
 const RightBar = () => {
   return (
-    <div className="d-flex justify-content-evenly buttons-user-join mb-5">
+    <div className="d-flex justify-content-evenly buttons-user-join my-2">
       <AuthProvider>
         <Join />
         <SignUp />

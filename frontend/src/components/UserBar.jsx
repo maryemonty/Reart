@@ -75,8 +75,7 @@ function UserBar({ email }) {
         </DropdownToggle>
         <DropdownMenu className="default-bg-color">
           <DropdownItem>
-            <Link to={"/youraccount/" + username} className="text-decoration-none white">
-              {" "}
+            <Link to={"/profile/" + username} className="text-decoration-none white">
               <RiAccountCircleFill /> Account
             </Link>
           </DropdownItem>

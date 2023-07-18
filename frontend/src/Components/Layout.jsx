@@ -5,9 +5,9 @@ import RightBar from "./RightBar";
 import Home from "./Home";
 import TopArtist from "./TopArtist";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import YourAccount from "./YourAccount";
 import Settings from "./Settings";
 import Categories from "./Categories";
+import Profile from "./Profile";
 
 function Layout() {
   return (
@@ -19,7 +19,7 @@ function Layout() {
         <Col lg={8}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path={"/youraccount/:user"} element={<YourAccount />} />
+            <Route path={"/profile/:user"} element={<Profile />} />
             <Route path={"/categories"} element={<Categories />} />
             <Route path={"/settings/:id"} element={<Settings />} />
             <Route path={"/searched"} element={<ArtworkSearch />} />

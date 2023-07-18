@@ -70,12 +70,12 @@ function SubmitArtwork({ closeModal }) {
   return (
     <div>
       <Modal isOpen={true} toggle={toggleModal}>
-        <ModalHeader toggle={toggleModal}>Modale</ModalHeader>
+        <ModalHeader toggle={toggleModal}>Submit</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit}>
             <FormGroup>
               <Label for="title">Title:</Label>
-              <Input type="text" name="title" id="title" value={formData.title} onChange={handleChange} />
+              <Input type="text" name="title" id="title" value={formData.title.toLowerCase()} onChange={handleChange} />
             </FormGroup>
             <FormGroup>
               <Label for="description">Description:</Label>
@@ -89,7 +89,14 @@ function SubmitArtwork({ closeModal }) {
             </FormGroup>
             <FormGroup>
               <Label for="art">Art:</Label>
-              <Input type="text" name="art" id="art" value={formData.art} onChange={handleChange} />
+              <Input
+                type="text"
+                name="art"
+                placeholder="http://..."
+                id="art"
+                value={formData.art}
+                onChange={handleChange}
+              />
             </FormGroup>
             <FormGroup>
               <Label for="price">Price:</Label>
@@ -123,7 +130,7 @@ function SubmitArtwork({ closeModal }) {
               </Input>
             </FormGroup>
             <div className="d-flex justify-content-end">
-              <Button type="submit" color="primary">
+              <Button type="submit" className="btn-default">
                 Submit
               </Button>
             </div>
@@ -138,8 +145,8 @@ function List({ icon: Icon, name, active, onItemClick }) {
   const classes = `nav-link d-flex align-items-center px-3 gap-3 ${
     active ? "border-active text-white" : "border-no-active"
   }`;
-  const iconStyle = active ? "icon-active my-2" : "icon my-2";
-  const nameStyle = active ? "text-white" : "";
+  const iconStyle = active ? "icon-active my-1" : "icon my-2 text-secondary";
+  const nameStyle = active ? "text-white fw-bold" : "text-secondary";
 
   return (
     <div className={classes} onClick={onItemClick}>

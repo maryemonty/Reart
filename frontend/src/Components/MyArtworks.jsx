@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Row, Col, Card, CardBody } from "reactstrap";
+import { Row, Col, Card, CardBody, Modal, ModalHeader, ModalBody } from "reactstrap";
 import LikeButton from "./LikeButton";
 
-function MyArtworks() {
+function MyArtworks({ username }) {
   const token = useSelector((state) => state.user.token);
-  const username = useSelector((state) => state.profile.username);
   const [artworks, setArtworks] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedArtwork, setSelectedArtwork] = useState(null);
 
   useEffect(() => {
     fetch(`http://localhost:8080/users/${username}`, {
@@ -16,7 +17,6 @@ function MyArtworks() {
     })
       .then((response) => {
         if (response.ok) {
-          console.log("Siamo qui ora");
           return response.json();
         } else {
           throw new Error("Errore durante il recupero delle informazioni utente");
@@ -40,8 +40,18 @@ function MyArtworks() {
     }
   }
 
+  const handleViewArtwork = (artwork) => {
+    setSelectedArtwork(artwork);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedArtwork(null);
+  };
+
   return (
-    <Row className="mx-1 my-5 flex-wrap-reverse">
+    <Row className="mx-1 mt-5 flex-wrap-reverse">
       {artworks.map((artwork) => (
         <Col md={4} key={artwork.id}>
           <Card className="mb-5 border-0">
@@ -61,7 +71,7 @@ function MyArtworks() {
             </div>
             <CardBody className="default-bg-color">
               <h5
-                className="card-title white fw-bold fs-3"
+                className="card-title white fw-bold fs-3 text-capitalize"
                 style={{
                   maxWidth: "100%",
                   overflow: "hidden",
@@ -89,12 +99,27 @@ function MyArtworks() {
               </div>
               <div className="d-flex justify-content-between">
                 <button className="white fs-6 px-3 py-1 fw-bold btn-default rounded border-0">Place a bid</button>
-                <button className="white fs-6 px-3 py-1 fw-bold rounded bg-transparent">View Artwork</button>
+                <button
+                  className="white fs-6 px-3 py-1 fw-bold rounded bg-transparent"
+                  onClick={() => handleViewArtwork(artwork)}
+                >
+                  View Artwork
+                </button>
               </div>
             </CardBody>
           </Card>
         </Col>
       ))}
+
+      <Modal isOpen={showModal} toggle={closeModal} contentClassName="glass-modal">
+        <ModalHeader toggle={closeModal} className="text-capitalize">
+          {selectedArtwork?.title}
+        </ModalHeader>
+        <ModalBody>
+          {selectedArtwork && <img src={selectedArtwork.art} alt="Artwork" className="img-fluid mb-2" />}
+          <p className="fs-3 text-white">{selectedArtwork && selectedArtwork.description}</p>
+        </ModalBody>
+      </Modal>
     </Row>
   );
 }

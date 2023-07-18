@@ -36,7 +36,7 @@ public class ArtworkController {
 
 	@GetMapping("/search")
 	public List<Artwork> findByTitle(@RequestParam("q") @PathVariable String title) throws NotFound {
-		return artworkService.findByTitle(title);
+		return artworkService.findByTitleContaining(title);
 	}
 
 	@PostMapping("/{userId}")

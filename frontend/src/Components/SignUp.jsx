@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { AuthContext } from "./AuthContext";
 
@@ -10,21 +10,22 @@ const SignUp = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [propic] = useState("");
+  const [errors, setErrors] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const toggleModal = () => {
     setSignUpModal(!signUpModal);
+    setErrors([]);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formValues = {
-      name,
-      surname,
-      username,
-      email,
+      name: name.toLowerCase(),
+      surname: surname.toLowerCase(),
+      username: username.toLowerCase(),
+      email: email.toLowerCase(),
       password,
-      propic,
     };
     handleSignUp(formValues);
   };
@@ -36,8 +37,9 @@ const SignUp = () => {
       username: values.username,
       email: values.email,
       password: values.password,
-      propic: values.propic,
     };
+
+    setIsSubmitting(true);
 
     fetch("http://localhost:8080/auth/signup", {
       method: "POST",
@@ -49,15 +51,19 @@ const SignUp = () => {
       .then((response) => {
         if (response.ok) {
           console.log("Registration submitted:", values);
+          toggleModal();
         } else {
-          throw new Error("Error during registration");
+          return response.json().then((data) => {
+            setErrors(data.message);
+            throw new Error("Error during registration");
+          });
         }
       })
       .catch((error) => {
         console.log("Error during registration:", error);
       })
       .finally(() => {
-        toggleModal();
+        setIsSubmitting(false);
       });
   };
 
@@ -73,11 +79,12 @@ const SignUp = () => {
           Sign up
         </button>
       </div>
-      <Modal isOpen={signUpModal} toggle={toggleModal} contentClassName="default-bg-color">
+      <Modal isOpen={signUpModal} toggle={toggleModal}>
         <ModalHeader className="border-0" toggle={toggleModal}>
           Sign Up
         </ModalHeader>
         <ModalBody className="border-0">
+          <p className="text-danger">{errors}</p>
           <form onSubmit={handleSubmit}>
             <div>
               <label htmlFor="name">Name:</label>
@@ -87,7 +94,6 @@ const SignUp = () => {
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                required
               />
             </div>
             <div>
@@ -98,7 +104,6 @@ const SignUp = () => {
                 id="surname"
                 value={surname}
                 onChange={(e) => setSurname(e.target.value)}
-                required
               />
             </div>
             <div>
@@ -109,7 +114,6 @@ const SignUp = () => {
                 id="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                required
               />
             </div>
             <div>
@@ -120,7 +124,6 @@ const SignUp = () => {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
               />
             </div>
             <div>
@@ -131,14 +134,10 @@ const SignUp = () => {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
               />
             </div>
             <ModalFooter className="border-0">
-              <Button onClick={toggleModal} className="btn-join bg-transparent">
-                Cancel
-              </Button>
-              <Button type="submit" className="btn-default border-0">
+              <Button type="submit" className="btn-default border-0 fw-bold" disabled={isSubmitting}>
                 Sign Up
               </Button>
             </ModalFooter>

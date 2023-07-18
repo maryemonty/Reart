@@ -12,6 +12,10 @@ $gradient-button: linear-gradient(
 );
 
 $margin-top: 1rem;
+.glass-modal {
+  backdrop-filter: blur(70px);
+  background-color: transparent;
+}
 
 .zoom:hover {
   transform: scale(1.01);
