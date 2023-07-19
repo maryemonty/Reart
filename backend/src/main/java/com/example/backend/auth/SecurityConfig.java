@@ -3,6 +3,7 @@ package com.example.backend.auth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -24,17 +25,14 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain security(HttpSecurity http) throws Exception {
 		http.csrf(c -> c.disable());
-
-		// l'endpoint users già di default richiede l'autenticazione
-		// .authenticated(),
-		// permitAll() don't //
-		// need
-		// authorization
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/like/**").permitAll());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/users/**").permitAll());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/profile/**").permitAll());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/artworks/**").permitAll());
+		http.authorizeHttpRequests(auth -> auth.requestMatchers("/notifications/**").authenticated());
+		http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.PUT, "/artworks/**").authenticated());
+		http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.DELETE, "/artworks/**").authenticated());
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 		http.addFilterBefore(corsFilter, JWTFilter.class);
 		// we don't need it because we use JWT

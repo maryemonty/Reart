@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useSelector } from "react-redux";
+import NotifyUser from "./NotifyUser";
 
 const LikeButton = ({ artworkId }) => {
   const [liked, setLiked] = useState(false);
@@ -97,7 +98,6 @@ const LikeButton = ({ artworkId }) => {
 
     checkLikeStatus();
   }, [token, userId, artworkId]);
-
   return (
     <button className="bg-transparent border-0 text-white" onClick={handleClick}>
       {liked ? <AiFillHeart /> : <AiOutlineHeart />}

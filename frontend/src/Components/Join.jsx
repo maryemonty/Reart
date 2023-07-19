@@ -14,9 +14,11 @@ const Join = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState([]);
 
   const toggleJoinModal = () => {
     setJoinModal(!joinModal);
+    setErrors([]);
   };
 
   const handleJoin = (e) => {
@@ -36,10 +38,12 @@ const Join = () => {
     })
       .then((response) => {
         if (response.ok) {
-          console.log("Login effettuato", response);
           return response.json();
         } else {
-          throw new Error("Login fallito");
+          return response.json().then((data) => {
+            setErrors(data.message);
+            throw new Error("Error");
+          });
         }
       })
       .then((data) => {
@@ -73,6 +77,7 @@ const Join = () => {
           Join
         </ModalHeader>
         <ModalBody className="border-0">
+          <p className="text-danger">{errors}</p>
           <form onSubmit={handleJoin}>
             <div>
               <label htmlFor="email">Email:</label>

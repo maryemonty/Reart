@@ -60,7 +60,7 @@ const SignUp = () => {
         }
       })
       .catch((error) => {
-        console.log("Error during registration:", error);
+        console.log(error);
       })
       .finally(() => {
         setIsSubmitting(false);

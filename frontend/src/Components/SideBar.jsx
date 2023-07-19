@@ -24,6 +24,7 @@ import { useSelector } from "react-redux";
 function SubmitArtwork({ closeModal }) {
   const token = useSelector((state) => state.user.token);
   const id = useSelector((state) => state.profile.id);
+  const [errors, setErrors] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -51,15 +52,22 @@ function SubmitArtwork({ closeModal }) {
       },
       body: JSON.stringify(formData),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          return response.json().then((data) => {
+            setErrors(data.message);
+            throw new Error("Error");
+          });
+        }
+      })
       .then((data) => {
         console.log("Artwork submitted successfully:", data);
+        closeModal();
       })
       .catch((error) => {
         console.error("Error submitting artwork:", error);
-      })
-      .finally(() => {
-        closeModal();
       });
   };
 
@@ -72,6 +80,7 @@ function SubmitArtwork({ closeModal }) {
       <Modal isOpen={true} toggle={toggleModal}>
         <ModalHeader toggle={toggleModal}>Submit</ModalHeader>
         <ModalBody>
+          <p className="text-danger">{errors}</p>
           <Form onSubmit={handleSubmit}>
             <FormGroup>
               <Label for="title">Title:</Label>
@@ -155,8 +164,9 @@ function List({ icon: Icon, name, active, onItemClick }) {
   );
 }
 
-function ListNames() {
+function ListNames({ errors }) {
   const token = useSelector((state) => state.user.token);
+
   const [activeItem, setActiveItem] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
@@ -186,16 +196,18 @@ function ListNames() {
   };
 
   const closeModal = () => {
-    setShowModal(false);
-    const path = location.pathname;
-    if (path === "/categories") {
-      setActiveItem("Categories");
-    } else if (path === "/") {
-      setActiveItem("Home");
-    } else if (path.startsWith("/searched")) {
-      setActiveItem("Search");
-    } else {
-      navigate(path);
+    if (errors.length === 0) {
+      setShowModal(false);
+      const path = location.pathname;
+      if (path === "/categories") {
+        setActiveItem("Categories");
+      } else if (path === "/") {
+        setActiveItem("Home");
+      } else if (path.startsWith("/searched")) {
+        setActiveItem("Search");
+      } else {
+        navigate(path);
+      }
     }
   };
 
@@ -259,7 +271,8 @@ function ListNames() {
 }
 
 function Sidebar() {
-  return <ListNames />;
+  const errors = [];
+  return <ListNames errors={errors} />;
 }
 
 export default Sidebar;

@@ -39,9 +39,9 @@ function Profile() {
 
   if (isLoading) {
     return (
-      <div class="d-flex justify-content-center">
-        <div class="spinner-border m-5" role="status" style={{ width: "100px", height: "100px" }}>
-          <span class="visually-hidden">Loading...</span>
+      <div className="d-flex justify-content-center">
+        <div className="spinner-border m-5" role="status" style={{ width: "100px", height: "100px" }}>
+          <span className="visually-hidden">Loading...</span>
         </div>
       </div>
     );

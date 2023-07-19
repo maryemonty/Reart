@@ -26,7 +26,7 @@ import com.example.backend.users.payloads.UserSignUp;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = { "http://localhost:3000", "blob:http://localhost:3000" })
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
 
 	private final UserService userService;
@@ -63,10 +63,10 @@ public class AuthController {
 		if (existingUser == null) {
 			throw new NotFound("User not found");
 		}
+
 		if (body.getPropic() != null) {
 			existingUser.setPropic(body.getPropic());
 		}
-
 		if (body.getUsername() != null) {
 			existingUser.setUsername(body.getUsername());
 		}

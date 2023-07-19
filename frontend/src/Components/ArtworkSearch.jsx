@@ -97,7 +97,7 @@ const ArtworkSearch = () => {
                 </div>
                 <CardBody className="default-bg-color">
                   <h5
-                    className="card-title white fw-bold fs-3"
+                    className="card-title white fw-bold fs-3 text-capitalize"
                     style={{
                       maxWidth: "100%",
                       overflow: "hidden",

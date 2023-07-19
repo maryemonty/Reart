@@ -10,6 +10,7 @@ import com.example.backend.artwork.Artwork;
 import com.example.backend.artwork.ArtworkRepository;
 import com.example.backend.artwork.ArtworkService;
 import com.example.backend.exceptions.NotFound;
+import com.example.backend.notifications.NotificationsService;
 import com.example.backend.users.User;
 import com.example.backend.users.UserRepository;
 
@@ -19,14 +20,17 @@ public class LikeService {
 	private final UserRepository userRepository;
 	private final ArtworkRepository artworkRepository;
 	private final ArtworkService artworkService;
+	private final NotificationsService notificationsService;
 
 	@Autowired
 	public LikeService(LikeRepository likeRepository, UserRepository userRepository,
-			ArtworkRepository artworkRepository, ArtworkService artworkService) {
+			ArtworkRepository artworkRepository, ArtworkService artworkService,
+			NotificationsService notificationsService) {
 		this.likeRepository = likeRepository;
 		this.userRepository = userRepository;
 		this.artworkRepository = artworkRepository;
 		this.artworkService = artworkService;
+		this.notificationsService = notificationsService;
 	}
 
 	public User findByUserId(UUID id) throws NotFound {
@@ -42,9 +46,9 @@ public class LikeService {
 		Artwork artwork = findByArtworkId(artworkId);
 		boolean userLiked = likeRepository.existsByUserAndArtwork(user, artwork);
 		if (userLiked) {
-			throw new IllegalArgumentException("L'utente ha già messo un like su questa opera");
+			throw new IllegalArgumentException("user already liked this artwork");
 		}
-
+		String message = user.getName() + " ha messo like a " + artwork.getTitle();
 		artworkService.incrementLikeCount(artworkId);
 		Like newLike = new Like(like.getId(), user, artwork);
 
@@ -58,6 +62,7 @@ public class LikeService {
 	public void delete(UUID id, UUID artworkId) throws NotFound {
 		artworkService.decrementLikeCount(artworkId);
 		Like like = findById(id);
+		notificationsService.deleteNotificationByLikeId(like.getId());
 		likeRepository.delete(like);
 	}
 

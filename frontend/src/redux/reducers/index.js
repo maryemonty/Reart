@@ -14,6 +14,9 @@ const initialState = {
   artwork: {
     id: "",
   },
+  like: {
+    id: "",
+  },
 };
 
 const mainReducer = (state = initialState, action) => {
@@ -32,6 +35,14 @@ const mainReducer = (state = initialState, action) => {
         profile: {
           ...state.profile,
           username: action.payload,
+        },
+      };
+    case "SET_LIKEID":
+      return {
+        ...state,
+        like: {
+          ...state.like,
+          id: action.payload,
         },
       };
     case "SET_NEWNAME":
@@ -129,6 +140,10 @@ export const setNewPropic = (propic) => ({
 });
 export const setArtworkId = (id) => ({
   type: "SET_ARTWORKID",
+  payload: id,
+});
+export const setLikeId = (id) => ({
+  type: "SET_LIKEID",
   payload: id,
 });
 

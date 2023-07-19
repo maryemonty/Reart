@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.backend.artwork.Artwork;
 import com.example.backend.like.Like;
+import com.example.backend.notifications.Notifications;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -48,6 +49,9 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties({ "user", "likes" })
 	private List<Like> likes;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Notifications> notify;
 
 	public User(String username, String name, String surname, String email, String password) {
 		this.username = username;

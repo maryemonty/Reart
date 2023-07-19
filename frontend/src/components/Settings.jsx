@@ -8,15 +8,14 @@ const Settings = () => {
   const params = useParams();
   const profile = useSelector((state) => state.profile);
   const token = useSelector((state) => state.token);
-  const url = `http://localhost:8080/auth/${params.id}`;
 
   const [newUsername, setNewUsername] = useState("");
   const [newName, setNewName] = useState("");
   const [newSurname, setNewSurname] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [newPropic, setNewPropic] = useState(null);
   const [oldPassword, setOldPassword] = useState("");
+  const [newPropic, setNewPropic] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [editUsername, setEditUsername] = useState(false);
@@ -44,12 +43,10 @@ const Settings = () => {
       name: newName || profile.name,
       surname: newSurname || profile.surname,
       email: newEmail || profile.email,
-      password: newPassword || profile.password,
       propic: newPropic || profile.propic,
-      oldPassword: oldPassword,
     };
 
-    fetch(url, {
+    fetch(`http://localhost:8080/auth/${params.id}?oldPassword=${oldPassword}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -83,18 +80,41 @@ const Settings = () => {
   };
 
   const handlePasswordUpdate = () => {
-    if (oldPassword !== profile.password) {
-      setPasswordError(true);
-      return;
-    }
-
     if (newPassword !== confirmPassword) {
       setPasswordError(true);
       return;
     }
 
-    setNewPassword(newPassword);
-    togglePasswordModal();
+    const updatedFields = {
+      password: newPassword,
+      propic: profile.propic,
+    };
+
+    fetch(`http://localhost:8080/auth/${params.id}?oldPassword=${oldPassword}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedFields),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          setToastMessage("Error updating password");
+          throw new Error("Error updating password");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setToastMessage("Password updated successfully");
+        setShowToast(true);
+        setNewPassword("");
+        setConfirmPassword("");
+        togglePasswordModal();
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
 
   return (
@@ -179,9 +199,7 @@ const Settings = () => {
         </button>
         <hr />
         <div className="position-relative">
-          <button className="mb-3 btn btn-danger" onClick={() => setNewPassword(true)}>
-            Delete your account
-          </button>
+          <button className="mb-3 btn btn-danger">Delete your account</button>
         </div>
       </Col>
 
@@ -232,11 +250,7 @@ const Settings = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
-          {passwordError && (
-            <div className="text-danger">
-              Old password is incorrect or new password and confirm password do not match.
-            </div>
-          )}
+          {passwordError && <div className="text-danger">New password and confirm password do not match.</div>}
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={togglePasswordModal}>
