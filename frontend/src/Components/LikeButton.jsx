@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useSelector } from "react-redux";
-import NotifyUser from "./NotifyUser";
 
 const LikeButton = ({ artworkId }) => {
   const [liked, setLiked] = useState(false);
@@ -23,6 +22,10 @@ const LikeButton = ({ artworkId }) => {
   };
 
   const addLike = () => {
+    if (!userId || !artworkId) {
+      return Promise.reject(new Error("ArtworkId e/o UserId non presenti"));
+    }
+
     return new Promise((resolve, reject) => {
       fetch(`http://localhost:8080/like/${userId}/${artworkId}`, {
         method: "POST",
@@ -46,38 +49,31 @@ const LikeButton = ({ artworkId }) => {
   };
 
   const removeLike = () => {
+    if (!userId || !artworkId || !likeId) {
+      return Promise.reject(new Error("ArtworkId, UserId e/o LikeId non presenti"));
+    }
+
     return new Promise((resolve, reject) => {
-      fetch(`http://localhost:8080/like/${userId}/${artworkId}`)
-        .then((response) => response.json())
-        .then((data) => {
-          setLikeId(data.id);
-          console.log(data.id);
-        })
-        .then(() => {
-          fetch(`http://localhost:8080/like/${likeId}/${artworkId}`, {
-            method: "DELETE",
-          })
-            .then((response) => {
-              if (response.ok) {
-                resolve();
-              } else {
-                reject(new Error("Errore durante la rimozione del like"));
-              }
-            })
-            .catch((error) => {
-              reject(new Error("Errore nella richiesta HTTP:", error));
-            });
+      fetch(`http://localhost:8080/like/${likeId}/${artworkId}`, {
+        method: "DELETE",
+      })
+        .then((response) => {
+          if (response.ok) {
+            resolve();
+          } else {
+            reject(new Error("Errore durante la rimozione del like"));
+          }
         })
         .catch((error) => {
-          reject(new Error("Errore durante la rimozione del like", error));
+          reject(new Error("Errore nella richiesta HTTP:", error));
         });
     });
   };
 
   useEffect(() => {
     const checkLikeStatus = () => {
-      if (token) {
-        return fetch(`http://localhost:8080/like/${userId}/${artworkId}`)
+      if (token && userId && artworkId) {
+        fetch(`http://localhost:8080/like/${userId}/${artworkId}`)
           .then((response) => {
             if (response.ok) {
               return response.json();
@@ -98,6 +94,15 @@ const LikeButton = ({ artworkId }) => {
 
     checkLikeStatus();
   }, [token, userId, artworkId]);
+
+  if (!userId || !artworkId) {
+    return (
+      <button className="bg-transparent border-0 text-white">
+        <AiOutlineHeart />
+      </button>
+    );
+  }
+
   return (
     <button className="bg-transparent border-0 text-white" onClick={handleClick}>
       {liked ? <AiFillHeart /> : <AiOutlineHeart />}

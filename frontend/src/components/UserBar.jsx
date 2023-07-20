@@ -27,7 +27,6 @@ function UserBar({ email }) {
     })
       .then((response) => {
         if (response.ok) {
-          console.log("siamo qui", response);
           return response.json();
         } else {
           throw new Error("Errore durante il recupero delle informazioni utente");
@@ -37,6 +36,7 @@ function UserBar({ email }) {
         setPropic(data.propic);
         setUsername(data.username);
         setId(data.id);
+
         dispatch(setNewId(data.id));
         dispatch(setNewUsername(data.username));
         dispatch(setNewName(data.name));
@@ -54,16 +54,13 @@ function UserBar({ email }) {
   };
 
   const logOut = () => {
-    // Esegui il logout chiamando la funzione handleLogout
     loggedOut();
   };
 
   return (
     <div className="d-flex">
-      {/* /notify */}
       <NotifyUser />
 
-      {/* user propic */}
       <Dropdown isOpen={dropdownOpen} toggle={toggleDropdown}>
         <DropdownToggle caret className="bg-transparent border-0">
           <img

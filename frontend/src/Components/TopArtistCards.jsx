@@ -40,7 +40,7 @@ function TopArtistCards() {
           key={artist.id}
           style={{ color: "inherit" }}
         >
-          <div k className="d-flex gap-3 align-items-center default-bg-color rounded px-1 mb-3 ">
+          <div className="d-flex gap-3 align-items-center default-bg-color rounded px-1 mb-3 ">
             <p className="m-0">#0{index + 1}</p>
             <UserPropic userPropic={artist.propic} />
             <div>

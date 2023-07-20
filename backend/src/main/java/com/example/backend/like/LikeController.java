@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.backend.exceptions.NotFound;
 import com.example.backend.notifications.NotificationsService;
 
 @RestController
@@ -37,8 +38,28 @@ public class LikeController {
 	}
 
 	@GetMapping("/{userId}/{artworkId}")
-	public Like getLike(@PathVariable UUID userId, @PathVariable UUID artworkId) {
-		return likeService.findByUserAndArtworkId(userId, artworkId);
+	public Like getLike(@PathVariable String userId, @PathVariable String artworkId) {
+		if (userId == null || artworkId == null) {
+			return null;
+		}
+
+		UUID userUUID;
+		UUID artworkUUID;
+		try {
+			userUUID = UUID.fromString(userId);
+			artworkUUID = UUID.fromString(artworkId);
+		} catch (IllegalArgumentException e) {
+			return null;
+		}
+
+		Like like;
+		try {
+			like = likeService.findByUserAndArtworkId(userUUID, artworkUUID);
+		} catch (NotFound e) {
+			return null;
+		}
+
+		return like;
 	}
 
 	@PostMapping("/{userId}/{artworkId}")

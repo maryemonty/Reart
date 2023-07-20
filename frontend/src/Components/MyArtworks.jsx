@@ -93,7 +93,6 @@ function MyArtworks({ username }) {
 
   const saveEditArtwork = () => {
     if (!token) {
-      // Il token non è presente, gestisci l'errore o mostra un messaggio all'utente
       return;
     }
 
@@ -136,7 +135,6 @@ function MyArtworks({ username }) {
 
   const handleDeleteArtwork = (artworkId) => {
     if (!token) {
-      // Il token non è presente, gestisci l'errore o mostra un messaggio all'utente
       return;
     }
 

@@ -1,9 +1,7 @@
 import { createContext, useState } from "react";
 
-// Crea il contesto
 export const AuthContext = createContext();
 
-// Componente Provider del contesto
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);

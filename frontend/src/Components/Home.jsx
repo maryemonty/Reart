@@ -7,8 +7,6 @@ import { useMediaQuery } from "react-responsive";
 
 function Home() {
   const isDesktopSm = useMediaQuery({ maxWidth: 486 });
-  // 992
-
   return (
     <div className="overflow-scroll vh-100 overflow-x-hidden">
       <h1 className="fs-1 white fw-bold mb-0">Home</h1>

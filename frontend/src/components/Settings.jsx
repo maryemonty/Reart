@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { MdModeEdit } from "react-icons/md";
 import { Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button, Toast, ToastHeader, Fade } from "reactstrap";
 
 const Settings = () => {
+  const navigate = useNavigate();
   const params = useParams();
   const profile = useSelector((state) => state.profile);
   const token = useSelector((state) => state.token);
@@ -77,6 +78,26 @@ const Settings = () => {
   const togglePasswordModal = () => {
     setPasswordModalOpen(!passwordModalOpen);
     setPasswordError(false);
+  };
+  const handleDeleteAccount = () => {
+    fetch(`http://localhost:8080/users/${profile.username}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          navigate("/");
+          window.location.reload();
+        } else {
+          setToastMessage("Error deleting user");
+          throw new Error("Error deleting user");
+        }
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
 
   const handlePasswordUpdate = () => {
@@ -199,7 +220,9 @@ const Settings = () => {
         </button>
         <hr />
         <div className="position-relative">
-          <button className="mb-3 btn btn-danger">Delete your account</button>
+          <button className="mb-3 btn btn-danger" onClick={handleDeleteAccount}>
+            Delete your account
+          </button>
         </div>
       </Col>
 
