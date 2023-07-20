@@ -31,6 +31,7 @@ public class SecurityConfig {
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/artworks/**").permitAll());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/notifications/**").authenticated());
+		http.authorizeHttpRequests(auth -> auth.requestMatchers("/shop/**").authenticated());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.PUT, "/artworks/**").authenticated());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.DELETE, "/artworks/**").authenticated());
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

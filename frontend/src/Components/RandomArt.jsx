@@ -4,6 +4,7 @@ import UserPropic from "./UserPropic";
 import LikeButton from "./LikeButton";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Payment from "./Payment";
 
 function RandomArtwork() {
   const [artwork, setArtwork] = useState(null);
@@ -109,11 +110,7 @@ function RandomArtwork() {
             </p>
           </div>
           <div className="d-flex justify-content-between">
-            {token && email === artwork.user.email ? (
-              ""
-            ) : (
-              <button className="white fs-6 px-3 py-1 fw-bold btn-default rounded border-0">Buy it</button>
-            )}
+            {token && email === artwork.user.email ? "" : <Payment userId={artwork.user.id} artworkId={artwork.id} />}
             <button className="white fs-6 px-3 py-1 fw-bold rounded bg-transparent" onClick={handleViewArtwork}>
               View Artwork
             </button>

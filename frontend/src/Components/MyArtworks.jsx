@@ -18,6 +18,7 @@ import LikeButton from "./LikeButton";
 import { AiFillDelete } from "react-icons/ai";
 import { IoMdSettings } from "react-icons/io";
 import jwt_decode from "jwt-decode";
+import Payment from "./Payment";
 
 function MyArtworks({ username }) {
   const token = useSelector((state) => state.user.token);
@@ -213,11 +214,7 @@ function MyArtworks({ username }) {
                 </p>
               </div>
               <div className="d-flex justify-content-between">
-                {token && email === userEmail ? (
-                  ""
-                ) : (
-                  <button className="white fs-6 px-3 py-1 fw-bold btn-default rounded border-0">Buy it</button>
-                )}
+                {token && email === userEmail ? "" : <Payment userId={artwork.user.id} artworkId={artwork.id} />}
                 <button
                   className="white fs-6 px-3 py-1 fw-bold rounded bg-transparent"
                   onClick={() => handleViewArtwork(artwork)}

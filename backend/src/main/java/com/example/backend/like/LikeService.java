@@ -48,7 +48,7 @@ public class LikeService {
 		if (userLiked) {
 			throw new IllegalArgumentException("user already liked this artwork");
 		}
-		String message = user.getName() + " ha messo like a " + artwork.getTitle();
+		String message = user.getName() + " liked " + artwork.getTitle();
 		artworkService.incrementLikeCount(artworkId);
 		Like newLike = new Like(like.getId(), user, artwork);
 

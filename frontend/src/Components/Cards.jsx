@@ -4,6 +4,7 @@ import UserPropic from "./UserPropic";
 import LikeButton from "./LikeButton";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Payment from "./Payment";
 
 function Cards() {
   const [artworks, setArtworks] = useState([]);
@@ -103,7 +104,7 @@ function Cards() {
                     {token && email === artwork.user.email ? (
                       ""
                     ) : (
-                      <button className="white fs-6 px-3 py-1 fw-bold btn-default rounded border-0">Buy it</button>
+                      <Payment userId={artwork.user.id} artworkId={artwork.id} />
                     )}
                     <button
                       className="white fs-6 px-3 py-1 fw-bold rounded bg-transparent"
