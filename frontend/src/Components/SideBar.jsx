@@ -33,6 +33,9 @@ function SubmitArtwork({ closeModal }) {
     category: "",
   });
 
+  const imageUrlRegex = /\.(jpeg|jpg|gif|png|bmp|webp)$/i;
+  const numberRegex = /^[0-9]+$/;
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
@@ -43,6 +46,15 @@ function SubmitArtwork({ closeModal }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!imageUrlRegex.test(formData.art)) {
+      setErrors("Invalid image URL. Please provide a valid image URL.");
+      return;
+    }
+    if (!numberRegex.test(formData.price)) {
+      setErrors("Invalid price");
+      return;
+    }
 
     fetch(`http://localhost:8080/artworks/${id}`, {
       method: "POST",

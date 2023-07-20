@@ -119,7 +119,7 @@ function Categories() {
           </Card>
         ))
       ) : (
-        <div className="d-flex gap-1">
+        <div>
           <BiArrowBack onClick={handleBackClick} className="fs-1 zoom mb-4 fw-bold" />
           {isCategoryEmpty ? (
             <p className="fs-3 fw-bold mt-4 p-3 opacity-25">

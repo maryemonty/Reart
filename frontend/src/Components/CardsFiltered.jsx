@@ -33,7 +33,7 @@ function CardsFiltered({ selectedCategory, artworks }) {
   }
 
   return (
-    <div>
+    <div className="d-flex gap-3">
       {filteredArtworks.map((artwork) => (
         <Card key={artwork.id} className="text-bg-dark border-0">
           <div className="position-relative">
