@@ -3,12 +3,14 @@ import { Card, CardBody, Modal, ModalHeader, ModalBody } from "reactstrap";
 import UserPropic from "./UserPropic";
 import LikeButton from "./LikeButton";
 import { Link } from "react-router-dom";
-import Profile from "./Profile";
+import { useSelector } from "react-redux";
 
 function RandomArtwork() {
   const [artwork, setArtwork] = useState(null);
   const [user, setUser] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const token = useSelector((state) => state.user.token);
+  const email = useSelector((state) => state.profile.email);
 
   const handleViewArtwork = () => {
     setShowModal(true);
@@ -69,7 +71,7 @@ function RandomArtwork() {
             className="white position-absolute bottom-0 rounded px-4 py-2 fw-bold"
             style={{ backdropFilter: "blur(10px)" }}
           >
-            Current Bid <br /> {abbreviate(artwork.price)} $
+            Current Price <br /> {abbreviate(artwork.price)} $
           </p>
         </div>
         <CardBody className="default-bg-color">
@@ -107,7 +109,11 @@ function RandomArtwork() {
             </p>
           </div>
           <div className="d-flex justify-content-between">
-            <button className="white fs-6 px-3 py-1 fw-bold btn-default rounded border-0">Place a bid</button>
+            {token && email === artwork.user.email ? (
+              ""
+            ) : (
+              <button className="white fs-6 px-3 py-1 fw-bold btn-default rounded border-0">Buy it</button>
+            )}
             <button className="white fs-6 px-3 py-1 fw-bold rounded bg-transparent" onClick={handleViewArtwork}>
               View Artwork
             </button>

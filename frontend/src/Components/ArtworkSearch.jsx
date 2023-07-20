@@ -3,6 +3,7 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Card, CardBody, Col, Row, Modal, ModalHeader, ModalBody } from "reactstrap";
 import LikeButton from "./LikeButton";
 import UserPropic from "./UserPropic";
+import { useSelector } from "react-redux";
 
 const ArtworkSearch = () => {
   const [search, setSearch] = useState("");
@@ -10,6 +11,8 @@ const ArtworkSearch = () => {
   const [selectedArtwork, setSelectedArtwork] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const token = useSelector((state) => state.user.token);
+  const email = useSelector((state) => state.profile.email);
 
   useEffect(() => {
     const path = location.pathname;
@@ -92,7 +95,7 @@ const ArtworkSearch = () => {
                     className="white position-absolute bottom-0 rounded px-4 py-2 fw-bold"
                     style={{ backdropFilter: "blur(10px)" }}
                   >
-                    Current Bid <br /> {abbreviate(artwork.price)} $
+                    Current Price <br /> {abbreviate(artwork.price)} $
                   </p>
                 </div>
                 <CardBody className="default-bg-color">
@@ -130,7 +133,11 @@ const ArtworkSearch = () => {
                     </p>
                   </div>
                   <div className="d-flex justify-content-between">
-                    <button className="white fs-6 px-3 py-1 fw-bold btn-default rounded border-0">Place a bid</button>
+                    {token && email === artwork.user.email ? (
+                      ""
+                    ) : (
+                      <button className="white fs-6 px-3 py-1 fw-bold btn-default rounded border-0">Buy it</button>
+                    )}
                     <button
                       className="white fs-6 px-3 py-1 fw-bold rounded bg-transparent"
                       onClick={() => handleViewArtwork(artwork)}

@@ -181,7 +181,7 @@ function MyArtworks({ username }) {
                 className="white position-absolute bottom-0 rounded px-4 py-2 fw-bold"
                 style={{ backdropFilter: "blur(10px)" }}
               >
-                Current Bid <br /> {abbreviate(artwork.price)} $
+                Current Price <br /> {abbreviate(artwork.price)} $
               </p>
             </div>
             <CardBody className="default-bg-color">
@@ -213,7 +213,11 @@ function MyArtworks({ username }) {
                 </p>
               </div>
               <div className="d-flex justify-content-between">
-                <button className="white fs-6 px-3 py-1 fw-bold btn-default rounded border-0">Place a bid</button>
+                {token && email === userEmail ? (
+                  ""
+                ) : (
+                  <button className="white fs-6 px-3 py-1 fw-bold btn-default rounded border-0">Buy it</button>
+                )}
                 <button
                   className="white fs-6 px-3 py-1 fw-bold rounded bg-transparent"
                   onClick={() => handleViewArtwork(artwork)}
