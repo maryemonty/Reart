@@ -12,6 +12,8 @@ import com.example.backend.exceptions.NotFound;
 import com.example.backend.users.User;
 import com.example.backend.users.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class ShopService {
 
@@ -45,6 +47,12 @@ public class ShopService {
 
 	public List<Shop> find() {
 		return shopRepository.findAll();
+	}
+
+	@Transactional
+	public void deleteShopByArtworkId(UUID artworkId) {
+		List<Shop> shops = shopRepository.findByArtworkId(artworkId);
+		shopRepository.deleteAll(shops);
 	}
 
 }

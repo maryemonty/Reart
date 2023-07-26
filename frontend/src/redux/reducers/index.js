@@ -10,6 +10,7 @@ const initialState = {
     password: "",
     id: "",
     propic: "",
+    role: "",
   },
   artwork: {
     id: "",
@@ -93,6 +94,14 @@ const mainReducer = (state = initialState, action) => {
           propic: action.payload,
         },
       };
+    case "SET_NEWROLE":
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          role: action.payload,
+        },
+      };
     case "SET_ARTWORKID":
       return {
         ...state,
@@ -145,6 +154,10 @@ export const setArtworkId = (id) => ({
 export const setLikeId = (id) => ({
   type: "SET_LIKEID",
   payload: id,
+});
+export const setNewRole = (role) => ({
+  type: "SET_NEWROLE",
+  payload: role,
 });
 
 export default mainReducer;

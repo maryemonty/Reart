@@ -22,10 +22,13 @@ import Payment from "./Payment";
 
 function MyArtworks({ username }) {
   const token = useSelector((state) => state.user.token);
+  const id = useSelector((state) => state.user.id);
+  const userRole = useSelector((state) => state.profile.role);
   const decodedToken = token ? jwt_decode(token) : null;
   const userEmail = decodedToken?.sub;
   const [artworks, setArtworks] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
   const [selectedArtwork, setSelectedArtwork] = useState(null);
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
@@ -72,11 +75,12 @@ function MyArtworks({ username }) {
 
   const handleViewArtwork = (artwork) => {
     setSelectedArtwork(artwork);
-    setShowModal(true);
+    setShowViewModal(true);
   };
 
   const closeModal = () => {
-    setShowModal(false);
+    setShowEditModal(false);
+    setShowViewModal(false);
     setSelectedArtwork(null);
   };
 
@@ -89,7 +93,7 @@ function MyArtworks({ username }) {
       price: artwork.price,
       category: artwork.category,
     });
-    setShowModal(true);
+    setShowEditModal(true);
   };
 
   const saveEditArtwork = () => {
@@ -115,7 +119,7 @@ function MyArtworks({ username }) {
     })
       .then((response) => {
         if (response.ok) {
-          setShowModal(false);
+          setShowEditModal(false);
           setArtworks((prevArtworks) =>
             prevArtworks.map((artwork) =>
               artwork.id === selectedArtwork.id ? { ...artwork, ...updatedArtwork } : artwork
@@ -169,7 +173,7 @@ function MyArtworks({ username }) {
                 alt="logo"
                 style={{ height: "200px", objectFit: "cover" }}
               />
-              {token && email === userEmail && (
+              {(token && email === userEmail) || userRole === "ADMIN" ? (
                 <div className="position-absolute end-0 top-0 d-flex gap-3">
                   <IoMdSettings className="zoom text-white fs-2 shadow" onClick={() => handleEditArtwork(artwork)} />
                   <AiFillDelete
@@ -177,7 +181,8 @@ function MyArtworks({ username }) {
                     onClick={() => handleDeleteArtwork(artwork.id)}
                   />
                 </div>
-              )}
+              ) : null}
+
               <p
                 className="white position-absolute bottom-0 rounded px-4 py-2 fw-bold"
                 style={{ backdropFilter: "blur(10px)" }}
@@ -214,7 +219,7 @@ function MyArtworks({ username }) {
                 </p>
               </div>
               <div className="d-flex justify-content-between">
-                {token && email === userEmail ? "" : <Payment userId={artwork.user.id} artworkId={artwork.id} />}
+                {token && email === userEmail ? "" : <Payment userId={id} artworkId={artwork.id} />}
                 <button
                   className="white fs-6 px-3 py-1 fw-bold rounded bg-transparent"
                   onClick={() => handleViewArtwork(artwork)}
@@ -227,7 +232,7 @@ function MyArtworks({ username }) {
         </Col>
       ))}
 
-      <Modal isOpen={showModal} toggle={closeModal}>
+      <Modal isOpen={showEditModal} toggle={closeModal}>
         <ModalHeader toggle={closeModal} className="text-capitalize">
           Edit Artwork
         </ModalHeader>
@@ -309,6 +314,16 @@ function MyArtworks({ username }) {
             Save
           </Button>
         </ModalFooter>
+      </Modal>
+
+      <Modal isOpen={showViewModal} toggle={() => setShowViewModal(false)} contentClassName="glass-modal">
+        <ModalHeader toggle={() => setShowViewModal(false)} className="text-capitalize">
+          {selectedArtwork && selectedArtwork.title}
+        </ModalHeader>
+        <ModalBody>
+          {selectedArtwork && <img src={selectedArtwork.art} alt="Artwork" className="img-fluid mb-2" />}
+          <p className="fs-3 text-white">{selectedArtwork && selectedArtwork.description}</p>
+        </ModalBody>
       </Modal>
     </Row>
   );

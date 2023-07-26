@@ -12,23 +12,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.backend.notifications.NotificationsService;
+import com.example.backend.exceptions.NotFound;
+import com.example.backend.users.User;
+import com.example.backend.users.UserService;
 
 @RestController
 @RequestMapping("shop")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ShopController {
 	private final ShopService shopService;
-	private final NotificationsService notificationsService;
+	private final UserService userService;
 
-	public ShopController(ShopService shopService, NotificationsService notificationsService) {
+	public ShopController(ShopService shopService, UserService userService) {
 		this.shopService = shopService;
-		this.notificationsService = notificationsService;
+		this.userService = userService;
 	}
 
 	@GetMapping
 	public List<Shop> getLikes() {
 		return shopService.find();
+	}
+
+	@GetMapping("{userId}")
+	public User getArtwork(@PathVariable UUID userId) throws NotFound {
+		return userService.findById(userId);
 	}
 
 	@PostMapping("/{userId}/{artworkId}")

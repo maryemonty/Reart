@@ -2,14 +2,19 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import MyArtworks from "./MyArtworks";
+import jwt_decode from "jwt-decode";
 
 function Profile() {
   const token = useSelector((state) => state.user.token);
+  const decodedToken = token ? jwt_decode(token) : null;
+  const userEmail = decodedToken?.sub;
+  const userRole = useSelector((state) => state.profile.role);
   const params = useParams();
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [propic, setPropic] = useState("");
+  const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -30,6 +35,7 @@ function Profile() {
         setName(data.name);
         setSurname(data.surname);
         setPropic(data.propic);
+        setEmail(data.email);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -56,14 +62,17 @@ function Profile() {
         className="position-absolute top-0 start-0 bottom-0 end-0 h-100 w-100 opacity-25 z-n1 "
         style={{ filter: "blur(500px)" }}
       />
-      <div className="d-flex align-items-end gap-3 m-5">
+      <div className="d-flex align-items-end gap-3 m-5 position-relative">
         {/* profile picture */}
         <img
           src={propic}
           alt="profile picture"
-          className=" img-fluid rounded-circle"
+          className=" img-fluid rounded-circle "
           style={{ width: "300px", height: "300px" }}
         />
+        {userRole === "ADMIN" && email === userEmail && (
+          <p className="position-absolute bottom-0 start-0 p-2 fs-3 bg-warning text-white fw-bold rounded">Admin</p>
+        )}
         <div>
           <p className="white fs-1">@{username}</p>
           <p className="white fs-1 text-capitalize">

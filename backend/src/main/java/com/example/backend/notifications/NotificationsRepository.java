@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface NotificationsRepository extends JpaRepository<Notifications, UUID> {
 	List<Notifications> findByUserId(UUID userId);
 
-	void deleteByLikeId(UUID likeId);
+	List<Notifications> deleteByLikeId(UUID likeId);
 }

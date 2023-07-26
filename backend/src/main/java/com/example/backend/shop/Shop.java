@@ -31,6 +31,7 @@ public class Shop {
 	@JsonIgnoreProperties({ "user", "shop" })
 	private User user;
 	@OneToOne
+	@JoinColumn(name = "artwork_id")
 	@JsonIgnore
 	private Artwork artwork;
 

@@ -60,9 +60,9 @@ public class LikeService {
 	}
 
 	public void delete(UUID id, UUID artworkId) throws NotFound {
-		artworkService.decrementLikeCount(artworkId);
 		Like like = findById(id);
 		notificationsService.deleteNotificationByLikeId(like.getId());
+		artworkService.decrementLikeCount(artworkId);
 		likeRepository.delete(like);
 	}
 

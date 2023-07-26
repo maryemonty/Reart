@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import com.example.backend.like.Like;
+import com.example.backend.notifications.Notifications;
+import com.example.backend.shop.Shop;
 import com.example.backend.users.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -15,6 +17,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,6 +47,14 @@ public class Artwork {
 	@OneToMany(mappedBy = "artwork", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties({ "artworks", "likes" })
 	private List<Like> likes;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JsonIgnoreProperties({ "artworks", "notify" })
+	private Notifications notifications;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JsonIgnoreProperties({ "artworks", "shop" })
+	private Shop shop;
 
 	public Artwork(String title, String description, String art, Categories category, String price, User user,
 			int likeCount) {

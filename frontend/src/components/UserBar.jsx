@@ -6,7 +6,15 @@ import { Link } from "react-router-dom";
 import { IoMdSettings } from "react-icons/io";
 import { RiAccountCircleFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { setNewEmail, setNewSurname, setNewName, setNewUsername, setNewId, setNewPropic } from "../redux/reducers";
+import {
+  setNewEmail,
+  setNewSurname,
+  setNewName,
+  setNewUsername,
+  setNewId,
+  setNewPropic,
+  setNewRole,
+} from "../redux/reducers";
 
 function UserBar({ email }) {
   const dispatch = useDispatch();
@@ -43,6 +51,7 @@ function UserBar({ email }) {
         dispatch(setNewSurname(data.surname));
         dispatch(setNewEmail(data.email));
         dispatch(setNewPropic(data.propic));
+        dispatch(setNewRole(data.role));
       })
       .catch((error) => {
         console.log("Errore durante il recupero delle informazioni utente:", error);

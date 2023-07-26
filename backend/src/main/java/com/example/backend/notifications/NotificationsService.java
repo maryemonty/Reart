@@ -43,7 +43,9 @@ public class NotificationsService {
 
 	@Transactional
 	public void deleteNotificationByLikeId(UUID likeId) {
-		notificationsRepository.deleteByLikeId(likeId);
+		List<Notifications> notifications = notificationsRepository.deleteByLikeId(likeId);
+		notificationsRepository.deleteAll(notifications);
+
 	}
 
 	public List<Notifications> findByUserId(UUID userId) {
