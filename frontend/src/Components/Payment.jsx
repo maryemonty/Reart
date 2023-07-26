@@ -8,6 +8,7 @@ function Payment({ userId, artworkId }) {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [logModal, setLogModal] = useState(false);
   const [isCardValid, setIsCardValid] = useState(false);
+  const [isLicensePurchased, setIsLicensePurchased] = useState(false);
 
   const handleOpenPaymentModal = () => {
     setShowPaymentModal(true);
@@ -32,13 +33,14 @@ function Payment({ userId, artworkId }) {
     })
       .then((response) => {
         if (response.ok) {
-          console.log("Pagamento completato con successo!");
+          setIsLicensePurchased(true);
+          console.log("Payment completed");
         } else {
-          throw new Error("Errore durante l'acquisto dell'opera d'arte");
+          throw new Error("Error");
         }
       })
       .catch((error) => {
-        console.log("Errore durante l'acquisto dell'opera d'arte:", error);
+        console.log("Error", error);
       });
 
     setShowPaymentModal(false);
@@ -56,12 +58,16 @@ function Payment({ userId, artworkId }) {
 
   return (
     <>
-      <button
-        className="white fs-6 px-3 py-1 fw-bold btn-default rounded border-0"
-        onClick={token ? handleOpenPaymentModal : handleOpenLogModal}
-      >
-        Buy license
-      </button>
+      {isLicensePurchased ? (
+        <p className="text-white">You already bought this license</p>
+      ) : (
+        <button
+          className="white fs-6 px-3 py-1 fw-bold btn-default rounded border-0"
+          onClick={token ? handleOpenPaymentModal : handleOpenLogModal}
+        >
+          Buy license
+        </button>
+      )}
 
       <Modal isOpen={logModal} toggle={() => setLogModal(false)}>
         <ModalHeader toggle={() => setLogModal(false)}>Advise</ModalHeader>
@@ -81,9 +87,9 @@ function Payment({ userId, artworkId }) {
           <CreditCard onValidationChange={handleValidationChange} />
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={handleBuyClick}>
+          <div onClick={handleBuyClick}>
             <BuyButton isDisabled={!isCardValid} />
-          </Button>
+          </div>
           <Button color="secondary" onClick={() => setShowPaymentModal(false)}>
             Cancel
           </Button>

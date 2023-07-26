@@ -14,18 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.backend.exceptions.NotFound;
 import com.example.backend.users.User;
-import com.example.backend.users.UserService;
 
 @RestController
 @RequestMapping("shop")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ShopController {
 	private final ShopService shopService;
-	private final UserService userService;
 
-	public ShopController(ShopService shopService, UserService userService) {
+	public ShopController(ShopService shopService) {
 		this.shopService = shopService;
-		this.userService = userService;
 	}
 
 	@GetMapping
@@ -35,7 +32,7 @@ public class ShopController {
 
 	@GetMapping("{userId}")
 	public User getArtwork(@PathVariable UUID userId) throws NotFound {
-		return userService.findById(userId);
+		return shopService.findByUserId(userId);
 	}
 
 	@PostMapping("/{userId}/{artworkId}")
