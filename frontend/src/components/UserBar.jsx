@@ -70,14 +70,9 @@ function UserBar({ email }) {
     <div className="d-flex">
       <NotifyUser />
 
-      <Dropdown isOpen={dropdownOpen} toggle={toggleDropdown}>
+      <Dropdown isOpen={dropdownOpen} toggle={toggleDropdown} className="me-3">
         <DropdownToggle caret className="bg-transparent border-0">
-          <img
-            style={{ width: "32px", height: "32px" }}
-            src={propic}
-            alt="profile picture"
-            className="rounded-circle img-fluid"
-          />
+          <img style={{ width: "50px" }} src={propic} alt="profile picture" className="rounded-circle img-fluid" />
         </DropdownToggle>
         <DropdownMenu className="default-bg-color">
           <DropdownItem>

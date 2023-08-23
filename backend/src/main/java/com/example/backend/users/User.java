@@ -43,11 +43,11 @@ public class User implements UserDetails {
 	private Role role;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	@JsonIgnoreProperties({ "user", "likes" })
+	@JsonIgnoreProperties({ "user", "likes", "notifications", "shop" })
 	private List<Artwork> artworks;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	@JsonIgnoreProperties({ "user", "likes" })
+	@JsonIgnoreProperties({ "user", "artwork", "notifications" })
 	private List<Like> likes;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

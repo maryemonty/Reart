@@ -29,15 +29,16 @@ public class Like {
 	private UUID id;
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	@JsonIgnoreProperties({ "user", "likes" })
+	@JsonIgnoreProperties({ "artworks", "likes", "notify" })
 	private User user;
+
 	@ManyToOne
 	@JoinColumn(name = "artwork_id")
-	@JsonIgnoreProperties({ "user", "likes" })
+	@JsonIgnoreProperties({ "artworks", "user", "notifications" })
 	private Artwork artwork;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JsonIgnoreProperties({ "likes", "notify" })
+	@JsonIgnoreProperties({ "artwork", "notify", "user" })
 	private Notifications notifications;
 
 	public Like(UUID id, User user, Artwork artwork) {

@@ -41,20 +41,20 @@ public class Artwork {
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	@JsonIgnoreProperties({ "artworks", "likes" })
+	@JsonIgnoreProperties({ "artworks", "likes", "notify" })
 	private User user;
 
 	@OneToMany(mappedBy = "artwork", cascade = CascadeType.ALL)
-	@JsonIgnoreProperties({ "artworks", "likes" })
+	@JsonIgnoreProperties({ "user", "artwork", "notifications" })
 	private List<Like> likes;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JsonIgnoreProperties({ "artworks", "notify" })
+	@JsonIgnoreProperties({ "artwork", "notify", "user" })
 	private Notifications notifications;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JsonIgnoreProperties({ "artworks", "shop" })
-	private Shop shop;
+	@OneToMany(mappedBy = "artwork", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties({ "artwork", "shop" })
+	private List<Shop> shop;
 
 	public Artwork(String title, String description, String art, Categories category, String price, User user,
 			int likeCount) {
